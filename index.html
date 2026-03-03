@@ -2,6 +2,10 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script data-cfasync="false">window.addEventListener("error",function(e){if(e.filename&&e.filename.indexOf("cloudflare")>=0){e.preventDefault();return false}},true);</script>
+
+<meta name="cf-email-decode" content="off"/>
+
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -539,7 +543,7 @@ body.no-auth .mn{margin-left:0!important}
   <div class="auth-box show" id="authLogin">
     <h2>Connexion</h2>
     <div class="ab-sub">Accedez a votre espace Studio Educatif</div>
-    <div class="fi" style="margin-bottom:10px"><label class="fl">Email academique</label><input class="fn" id="logEmail" placeholder="prenom.nom@ac-bordeaux.fr" style="font-size:14px"/></div>
+    <div class="fi" style="margin-bottom:10px"><label class="fl">Email academique</label><input class="fn" id="logEmail" placeholder="prenom.nom[at]ac-bordeaux.fr" style="font-size:14px"/></div>
     <div class="fi" style="margin-bottom:14px"><label class="fl">Mot de passe</label><input class="fn" id="logPass" type="password" placeholder="••••••••" style="font-size:14px"/></div>
     <button class="bt bt-p" style="width:100%;justify-content:center;font-size:14px;padding:12px" onclick="doLogin()">Se connecter</button>
     <div class="ab-switch">Pas encore inscrit ? <a onclick="showAuth('signup')">Creer un compte</a></div>
@@ -553,7 +557,7 @@ body.no-auth .mn{margin-left:0!important}
       <div class="fi"><label class="fl">Prenom</label><input class="fn" id="sigFirst" placeholder="David" style="font-size:14px"/></div>
       <div class="fi"><label class="fl">Nom</label><input class="fn" id="sigLast" placeholder="Bouisson" style="font-size:14px"/></div>
     </div>
-    <div class="fi" style="margin-top:8px"><label class="fl">Email academique <span class="rq">*</span></label><input class="fn" id="sigEmail" placeholder="prenom.nom@ac-bordeaux.fr" style="font-size:14px"/></div>
+    <div class="fi" style="margin-top:8px"><label class="fl">Email academique <span class="rq">*</span></label><input class="fn" id="sigEmail" placeholder="prenom.nom[at]ac-bordeaux.fr" style="font-size:14px"/></div>
     <div class="fi" style="margin-top:8px"><label class="fl">Etablissement</label><input class="fn" id="sigEtab" placeholder="Lycee Charles Peguy — Eysines" style="font-size:14px"/></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
       <div class="fi"><label class="fl">Cycle <span class="rq">*</span></label><select class="fn" id="sigCycle" style="min-height:40px;font-size:13px" onchange="updSigNiveaux()">
@@ -584,7 +588,7 @@ body.no-auth .mn{margin-left:0!important}
     </div>
     <div class="fi" style="margin-top:8px"><label class="fl">Specialite / Filiere</label><input class="fn" id="sigSpec" placeholder="Ex: MELEC, STI2D, SVT..." style="font-size:14px"/></div>
     <div class="fi" style="margin-top:8px"><label class="fl">Mot de passe</label><input class="fn" id="sigPass" type="password" placeholder="Minimum 8 caracteres" style="font-size:14px"/></div>
-    <div style="font-size:10px;color:var(--tl);margin:10px 0;line-height:1.5">📧 Tous les domaines academiques francais sont acceptes (@ac-*.fr). Enseignement superieur : @univ-*.fr, @u-*.fr egalement.</div>
+    <div style="font-size:10px;color:var(--tl);margin:10px 0;line-height:1.5">📧 Tous les domaines academiques francais sont acceptes (&#64;ac-*.fr). Enseignement superieur : &#64;univ-*.fr, &#64;u-*.fr egalement.</div>
     <button class="bt bt-p" style="width:100%;justify-content:center;font-size:14px;padding:12px" onclick="doSignup()">Creer mon compte</button>
     <div class="ab-switch">Deja inscrit ? <a onclick="showAuth('login')">Se connecter</a></div>
     <div style="text-align:center;margin-top:10px"><a style="font-size:11px;color:var(--tl);cursor:pointer" onclick="hideAuth()">← Retour a l'accueil</a></div>
@@ -846,7 +850,7 @@ body.no-auth .mn{margin-left:0!important}
 <div class="pg" id="pg-drive">
 <div class="tb"><div class="tbl"><button class="hb" onclick="togSb()"><span></span><span></span><span></span></button><div class="tbt">Google Drive</div></div></div>
 <div class="ct">
-<div id="dNC"><div class="gc"><div style="font-size:30px;margin-bottom:6px">☁️</div><h3>Connectez votre Google</h3><p>Accedez a vos PDF, envoyez et partagez.</p><div class="gf"><input type="email" id="gEI" placeholder="votre.email@gmail.com"/><button class="bt bt-p" onclick="connG()" style="width:100%;justify-content:center">🔑 Se connecter</button></div></div></div>
+<div id="dNC"><div class="gc"><div style="font-size:30px;margin-bottom:6px">☁️</div><h3>Connectez votre Google</h3><p>Accedez a vos PDF, envoyez et partagez.</p><div class="gf"><input type="email" id="gEI" placeholder="votre.email[at]gmail.com"/><button class="bt bt-p" onclick="connG()" style="width:100%;justify-content:center">🔑 Se connecter</button></div></div></div>
 <div id="dCo" style="display:none">
   <div class="gc cn"><div class="ga"><div class="av">DB</div><div class="gi"><div class="ge" id="dEm2"></div><div class="gs">✅ Connecte</div></div></div><div style="display:flex;gap:6px;justify-content:center"><button class="bt bt-d bt-sm" onclick="syncD()">🔄 Sync</button><button class="bt bt-s bt-sm" onclick="discG()">Deconnecter</button></div></div>
   <div class="cd" style="margin-top:14px"><div class="cdt">📁 Dossiers</div><div class="dcg">
@@ -915,7 +919,7 @@ body.no-auth .mn{margin-left:0!important}
 <div class="ct">
 <div style="display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap"><button class="bt bt-sm act" id="lgT1" onclick="showLegal(1)">Mentions legales</button><button class="bt bt-s bt-sm" id="lgT2" onclick="showLegal(2)">CGU</button><button class="bt bt-s bt-sm" id="lgT3" onclick="showLegal(3)">Politique de confidentialite</button></div>
 <div class="cd" id="lgS1"><div class="cdt">Mentions legales</div><div style="font-size:12px;line-height:1.8;color:var(--t)"><p><b>Editeur</b><br>Studio Educatif est un outil pedagogique developpe par David Bouisson, enseignant en genie electrique.<br>Contact : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e78386918e83c98588928e94948889a78684ca858895838286929fc98195">[email&#160;protected]</a></p><p style="margin-top:12px"><b>Hebergement</b><br>Application web hebergee en France. Les donnees sont stockees localement dans le navigateur de l utilisateur (stockage local) et ne sont pas transmises a des serveurs tiers, a l exception des appels a l API Claude (Anthropic) pour la generation de contenu pedagogique.</p><p style="margin-top:12px"><b>Propriete intellectuelle</b><br>L ensemble du contenu de Studio Educatif (code, design, textes) est la propriete de David Bouisson. Les referentiels et programmes officiels cites appartiennent au Ministere de l Education nationale. Les documents generes par l IA sont destines a un usage pedagogique et restent la propriete de l enseignant qui les genere.</p><p style="margin-top:12px"><b>Responsabilite</b><br>Les documents generes par intelligence artificielle sont des propositions pedagogiques. L enseignant reste seul responsable de la verification, de l adaptation et de la validation des contenus avant utilisation en classe. Studio Educatif ne saurait etre tenu responsable d erreurs ou d omissions dans les documents generes.</p></div></div>
-<div class="cd" id="lgS2" style="display:none"><div class="cdt">Conditions Generales d Utilisation</div><div style="font-size:12px;line-height:1.8;color:var(--t)"><p><b>Article 1 — Objet</b><br>Les presentes CGU regissent l utilisation de l application Studio Educatif, outil d aide a la creation de documents pedagogiques assiste par intelligence artificielle, destine aux enseignants de l Education nationale.</p><p style="margin-top:12px"><b>Article 2 — Acces au service</b><br>L inscription est reservee aux personnels de l Education nationale disposant d une adresse email academique (@ac-*.fr). Trois niveaux d acces existent : Gratuit (3 generations/mois), Premium (generations illimitees, fonctionnalites avancees) et Createur (acces complet et administration).</p><p style="margin-top:12px"><b>Article 3 — Utilisation</b><br>L utilisateur s engage a utiliser Studio Educatif exclusivement a des fins pedagogiques et professionnelles. Toute utilisation commerciale, frauduleuse ou contraire aux valeurs de l Education nationale est interdite. L utilisateur est responsable de la confidentialite de ses identifiants.</p><p style="margin-top:12px"><b>Article 4 — Contenu genere</b><br>Les documents generes par l IA constituent des propositions. L enseignant doit les verifier, les adapter et les valider avant toute utilisation. Les contenus generes ne refletent pas une position officielle du Ministere.</p><p style="margin-top:12px"><b>Article 5 — Propriete des documents</b><br>Les documents generes par l utilisateur lui appartiennent. Studio Educatif ne conserve pas de copie des documents generes au-dela de la session de travail.</p><p style="margin-top:12px"><b>Article 6 — Disponibilite</b><br>Studio Educatif est fourni en l etat. Aucune garantie de disponibilite permanente n est assuree. Le service peut etre interrompu pour maintenance ou evolution.</p><p style="margin-top:12px"><b>Article 7 — Modification des CGU</b><br>Les presentes CGU peuvent etre modifiees a tout moment. L utilisateur sera informe des modifications lors de sa prochaine connexion.</p></div></div>
+<div class="cd" id="lgS2" style="display:none"><div class="cdt">Conditions Generales d Utilisation</div><div style="font-size:12px;line-height:1.8;color:var(--t)"><p><b>Article 1 — Objet</b><br>Les presentes CGU regissent l utilisation de l application Studio Educatif, outil d aide a la creation de documents pedagogiques assiste par intelligence artificielle, destine aux enseignants de l Education nationale.</p><p style="margin-top:12px"><b>Article 2 — Acces au service</b><br>L inscription est reservee aux personnels de l Education nationale disposant d une adresse email academique (&#64;ac-*.fr). Trois niveaux d acces existent : Gratuit (3 generations/mois), Premium (generations illimitees, fonctionnalites avancees) et Createur (acces complet et administration).</p><p style="margin-top:12px"><b>Article 3 — Utilisation</b><br>L utilisateur s engage a utiliser Studio Educatif exclusivement a des fins pedagogiques et professionnelles. Toute utilisation commerciale, frauduleuse ou contraire aux valeurs de l Education nationale est interdite. L utilisateur est responsable de la confidentialite de ses identifiants.</p><p style="margin-top:12px"><b>Article 4 — Contenu genere</b><br>Les documents generes par l IA constituent des propositions. L enseignant doit les verifier, les adapter et les valider avant toute utilisation. Les contenus generes ne refletent pas une position officielle du Ministere.</p><p style="margin-top:12px"><b>Article 5 — Propriete des documents</b><br>Les documents generes par l utilisateur lui appartiennent. Studio Educatif ne conserve pas de copie des documents generes au-dela de la session de travail.</p><p style="margin-top:12px"><b>Article 6 — Disponibilite</b><br>Studio Educatif est fourni en l etat. Aucune garantie de disponibilite permanente n est assuree. Le service peut etre interrompu pour maintenance ou evolution.</p><p style="margin-top:12px"><b>Article 7 — Modification des CGU</b><br>Les presentes CGU peuvent etre modifiees a tout moment. L utilisateur sera informe des modifications lors de sa prochaine connexion.</p></div></div>
 <div class="cd" id="lgS3" style="display:none"><div class="cdt">Politique de confidentialite — RGPD</div><div style="font-size:12px;line-height:1.8;color:var(--t)"><p><b>Responsable du traitement</b><br>David Bouisson — <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="395d584f505d175b564c504a4a565779585a145b564b5d5c584c41175f4b">[email&#160;protected]</a></p><p style="margin-top:12px"><b>Donnees collectees</b><br>Lors de l inscription : prenom, nom, adresse email academique, etablissement, cycle, matieres, specialite. Ces donnees sont necessaires au fonctionnement du service et a la personnalisation des documents generes.</p><p style="margin-top:12px"><b>Stockage des donnees</b><br>Les donnees sont stockees localement dans le navigateur de l utilisateur via le mecanisme de stockage du navigateur. Aucune base de donnees externe n est utilisee dans la version actuelle. Les donnees ne sont pas partagees avec des tiers, a l exception des appels a l API Anthropic (Claude) pour la generation de contenu, qui ne conserve pas les donnees transmises.</p><p style="margin-top:12px"><b>Finalite du traitement</b><br>Les donnees sont utilisees exclusivement pour : l authentification, la personnalisation des documents pedagogiques generes, l adaptation de l interface au profil de l enseignant, le suivi du compteur de generations (plan Gratuit).</p><p style="margin-top:12px"><b>Duree de conservation</b><br>Les donnees sont conservees tant que l utilisateur dispose d un compte actif. La suppression du compte entraine la suppression immediate de toutes les donnees associees.</p><p style="margin-top:12px"><b>Droits de l utilisateur</b><br>Conformement au RGPD, vous disposez des droits suivants : acces a vos donnees (page Mon profil), rectification (modification directe dans Mon profil), suppression (bouton Supprimer mon compte), portabilite, limitation et opposition au traitement. Pour exercer ces droits : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2b4f4a5d424f0549445e42585844456b4a48064944594f4e4a5e53054d59">[email&#160;protected]</a></p><p style="margin-top:12px"><b>Cookies</b><br>Studio Educatif n utilise aucun cookie de tracage ni cookie publicitaire. Seul le stockage local du navigateur est utilise pour maintenir la session utilisateur.</p><p style="margin-top:12px"><b>Sous-traitants</b><br>Anthropic (API Claude) : generation de contenu IA. Les prompts envoyes contiennent le contexte pedagogique necessaire mais pas de donnees personnelles identifiantes au-dela du niveau et de la matiere enseignee.</p></div></div>
 </div></div>
 <!-- ADMIN (visible seulement pour le créateur) -->
@@ -1038,7 +1042,7 @@ async function checkAuth(){
 checkAuth();
 </script><script>
 // ========== AUTH SYSTEM ==========
-var CREATOR_EMAIL='david.bouisson@ac-bordeaux.fr';
+var CREATOR_EMAIL='david.bouisson'+String.fromCharCode(64)+'ac-bordeaux.fr';
 var ALLOWED_DOMAINS=['ac-bordeaux.fr','ac-toulouse.fr','ac-paris.fr','ac-lyon.fr','ac-lille.fr','ac-nantes.fr','ac-rennes.fr','ac-strasbourg.fr','ac-marseille.fr','ac-montpellier.fr','ac-grenoble.fr','ac-versailles.fr','ac-creteil.fr','ac-nice.fr','ac-poitiers.fr','ac-limoges.fr','ac-clermont.fr','ac-dijon.fr','ac-besancon.fr','ac-orleans-tours.fr','ac-amiens.fr','ac-rouen.fr','ac-caen.fr','ac-reims.fr','ac-nancy-metz.fr','ac-reunion.fr','ac-martinique.fr','ac-guadeloupe.fr','ac-guyane.fr','ac-mayotte.fr','ac-noumea.nc','ac-polynesie.pf','ac-wf.wf','ac-spm.fr','ac-corse.fr'];
 // Domaines enseignement supérieur
 var UNIV_PATTERNS=['univ-','u-','ens','insa-','iut','centralesupelec','polytechnique','mines-','ec-','enpc.fr','cnam.fr','lecnam.net'];
@@ -1099,7 +1103,7 @@ function showAuth(mode){
 function hideAuth(){document.getElementById('authOverlay').style.display='none'}
 
 function validateEmail(email){
-  var parts=email.split('@');if(parts.length!==2)return false;
+  var parts=email.split(String.fromCharCode(64));if(parts.length!==2)return false;
   var domain=parts[1].toLowerCase();
   if(ALLOWED_DOMAINS.some(function(d){return domain===d}))return true;
   for(var i=0;i<UNIV_PATTERNS.length;i++){if(domain.indexOf(UNIV_PATTERNS[i])>=0)return true}
@@ -1128,7 +1132,7 @@ async function doSignup(){
   var role=email===CREATOR_EMAIL?'creator':'free';
   var user={email:email,first:first,last:last,etab:etab,pass:pass,role:role,date:new Date().toISOString().split('T')[0],
     cycle:cycle,niveaux:niveaux,domaine:domaine,matieres:matieres,spec:spec,
-    academie:email.split('@')[1],genCount:0};
+    academie:email.split(String.fromCharCode(64))[1],genCount:0};
   users.push(user);
   await saveUsers(users);
   curUser=user;
@@ -1208,7 +1212,7 @@ async function renderAdmin(){
   document.getElementById('admTotal').textContent=users.length;
   document.getElementById('admPrem').textContent=users.filter(function(u){return u.role==='premium'}).length;
   document.getElementById('admFree').textContent=users.filter(function(u){return u.role==='free'}).length;
-  var acads={};users.forEach(function(u){var a=u.academie||u.email.split('@')[1];acads[a]=(acads[a]||0)+1});
+  var acads={};users.forEach(function(u){var a=u.academie||u.email.split(String.fromCharCode(64))[1];acads[a]=(acads[a]||0)+1});
   document.getElementById('admAcad').textContent=Object.keys(acads).length;
   var cycleNames={primaire:'🏫 Primaire',college:'📐 College',lycee_gen:'📘 L.General',lycee_techno:'⚙ L.Techno',lycee_pro:'🔧 L.Pro',bts:'🎓 BTS/CPGE',universite:'🏛 Universite',formation:'📝 Formation'};
   var cycles={};users.forEach(function(u){if(u.cycle){cycles[u.cycle]=(cycles[u.cycle]||0)+1}});
@@ -1217,7 +1221,7 @@ async function renderAdmin(){
   var topMats=Object.keys(mats).sort(function(a,b){return mats[b]-mats[a]}).slice(0,10);
   document.getElementById('admMatieres').innerHTML=topMats.map(function(m){return '<span style="padding:3px 10px;border-radius:50px;font-size:10px;font-weight:600;background:rgba(232,114,42,.08);color:var(--a)">'+m+' <b>'+mats[m]+'</b></span>'}).join('')||'<span style="font-size:10px;color:var(--tl)">Aucune donnee</span>';
   var topAcads=Object.keys(acads).sort(function(a,b){return acads[b]-acads[a]}).slice(0,8);
-  document.getElementById('admAcademies').innerHTML=topAcads.map(function(a){return '<span style="padding:3px 10px;border-radius:50px;font-size:10px;font-weight:600;background:rgba(45,138,86,.08);color:var(--ok)">@'+a+' <b>'+acads[a]+'</b></span>'}).join('');
+  document.getElementById('admAcademies').innerHTML=topAcads.map(function(a){return '<span style="padding:3px 10px;border-radius:50px;font-size:10px;font-weight:600;background:rgba(45,138,86,.08);color:var(--ok)">'+String.fromCharCode(64)+''+a+' <b>'+acads[a]+'</b></span>'}).join('');
   renderAdmUsers(users,'all');
   renderAdmDomains();
 }
@@ -1269,7 +1273,7 @@ function exportUsers(){
 }
 function renderAdmDomains(){
   var el=document.getElementById('admDomains');
-  el.innerHTML=ALLOWED_DOMAINS.map(function(d){return '<span style="font-size:10px;padding:3px 8px;background:rgba(42,90,140,.06);border-radius:50px;color:var(--p);font-weight:500">@'+d+'</span>'}).join('');
+  el.innerHTML=ALLOWED_DOMAINS.map(function(d){return '<span style="font-size:10px;padding:3px 8px;background:rgba(42,90,140,.06);border-radius:50px;color:var(--p);font-weight:500">'+String.fromCharCode(64)+''+d+'</span>'}).join('');
 }
 function addDomainPrompt(){
   var d=document.createElement('div');d.id='_addDom';
@@ -1280,11 +1284,11 @@ function addDomainPrompt(){
   setTimeout(function(){document.getElementById('_addDomIn').focus()},100);
 }
 function doAddDomain(){
-  var v=document.getElementById('_addDomIn').value.trim().toLowerCase().replace(/^@/,'');
+  var v=document.getElementById('_addDomIn').value.trim().toLowerCase().replace(/^\x40/,'');
   document.getElementById('_addDom').remove();document.getElementById('_addDomOv').remove();
   if(!v){toast('Domaine requis.','er');return}
   if(ALLOWED_DOMAINS.indexOf(v)>=0){toast('Domaine deja present.','er');return}
-  ALLOWED_DOMAINS.push(v);renderAdmDomains();toast('@'+v+' ajoute !','ok');
+  ALLOWED_DOMAINS.push(v);renderAdmDomains();toast(String.fromCharCode(64)+v+' ajoute !','ok');
 }
 
 // Override nav to check auth and trigger admin render
@@ -1575,11 +1579,11 @@ function togTg(el){el.classList.toggle('on')}
 function togSh(){document.getElementById('shS').style.display=document.getElementById('tDS').classList.contains('on')?'block':'none'}
 function doUp(inp){if(inp.files.length>0){S.file=inp.files[0];document.getElementById('fNm').textContent='📎 '+S.file.name;document.getElementById('fInf').style.display='block';toast('Fichier charge !','ok')}}
 function rmF(){S.file=null;document.getElementById('fInf').style.display='none';document.getElementById('fUp').value=''}
-function connG(){var em=document.getElementById('gEI').value.trim();if(!em||em.indexOf('@')<0){toast('Email invalide.','er');return}S.gC=true;S.gE=em;updDU();toast('Drive connecte !','ok')}
+function connG(){var em=document.getElementById('gEI').value.trim();if(!em||em.indexOf(String.fromCharCode(64))<0){toast('Email invalide.','er');return}S.gC=true;S.gE=em;updDU();toast('Drive connecte !','ok')}
 function discG(){S.gC=false;S.gE='';updDU();toast('Deconnecte.')}
 function updDU(){var d=document.getElementById('dDot'),l=document.getElementById('dLbl'),e=document.getElementById('dEml');if(S.gC){d.classList.remove('off');d.classList.add('on');l.textContent='Drive connecte';e.textContent=S.gE;document.getElementById('dNC').style.display='none';document.getElementById('dCo').style.display='block';document.getElementById('dEm2').textContent=S.gE}else{d.classList.remove('on');d.classList.add('off');l.textContent='Google Drive';e.textContent='Non connecte';document.getElementById('dNC').style.display='block';document.getElementById('dCo').style.display='none'}}
 function syncD(){var b=event.target;b.textContent='⏳...';b.disabled=true;setTimeout(function(){b.textContent='✅';toast('Sync OK !','ok');setTimeout(function(){b.textContent='🔄 Sync';b.disabled=false},1200)},1000)}
-function addSh(){var em=document.getElementById('shE').value.trim();if(!em||em.indexOf('@')<0){toast('Email invalide.','er');return}S.sh.push(em);var ini=em.split('@')[0].substring(0,2).toUpperCase();var el=document.createElement('div');el.className='shp';el.innerHTML='<div class="sa">'+ini+'</div><div class="si"><div class="sn2">'+em+'</div><div class="sp2">Lecteur</div></div><button style="border:none;background:none;color:var(--er);cursor:pointer" onclick="this.closest(\'.shp\').remove()">✕</button>';document.getElementById('shL').appendChild(el);document.getElementById('shE').value='';toast('Ajoute !','ok')}
+function addSh(){var em=document.getElementById('shE').value.trim();if(!em||em.indexOf(String.fromCharCode(64))<0){toast('Email invalide.','er');return}S.sh.push(em);var ini=em.split(String.fromCharCode(64))[0].substring(0,2).toUpperCase();var el=document.createElement('div');el.className='shp';el.innerHTML='<div class="sa">'+ini+'</div><div class="si"><div class="sn2">'+em+'</div><div class="sp2">Lecteur</div></div><button style="border:none;background:none;color:var(--er);cursor:pointer" onclick="this.closest(\'.shp\').remove()">✕</button>';document.getElementById('shL').appendChild(el);document.getElementById('shE').value='';toast('Ajoute !','ok')}
 function updR(){var tL={magistral:'Cours',tp:'TP',td:'TD'};var docs=[];document.querySelectorAll('.cb.ck').forEach(function(e){docs.push(e.textContent.trim())});var dOn=document.getElementById('tDU').classList.contains('on')&&S.gC;var sOn=document.getElementById('tDS').classList.contains('on')&&S.sh.length>0;
   var html='<b>Niveau:</b> '+(lvNm[S.niv]||'—')+' | <b>Type:</b> '+tL[S.type]+' | <b>Duree:</b> '+S.dur+'<br><b>Fiche:</b> '+(document.getElementById('iNum').value||'—')+' | <b>Classe:</b> '+(document.getElementById('iCls').value||'—')+'<br><b>Titre:</b> '+document.getElementById('iTit').value+'<br><b>Documents:</b> '+(docs.join(' • ')||'Aucun');
   if(S.type==='tp')html+='<br><b style="color:var(--a)">🔧 Protocole TP:</b> Doc Eleve + Ressources + Dossier SST';
