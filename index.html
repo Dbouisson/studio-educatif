@@ -390,24 +390,13 @@ body.no-auth .mn{margin-left:0!important}
 .auth-box button:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(42,90,140,.3)}
 .auth-err{color:var(--er);font-size:11px;font-weight:600;margin-top:8px;display:none}
 .auth-box .auth-info{font-size:9px;color:var(--tl);margin-top:16px;opacity:.6}
+.ab-panel{background:#fff;border-radius:16px;padding:32px 28px;width:420px;max-width:92vw;color:var(--t);box-shadow:0 16px 48px rgba(0,0,0,.2);text-align:left}
 </style>
 </head>
-<body class="no-auth">
-<div id="authGate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1B3A5C 0%,#2A5A8C 50%,#1B3A5C 100%);z-index:9999;display:flex;align-items:center;justify-content:center">
-<div style="background:#fff;border-radius:20px;padding:40px 32px;max-width:380px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.3);text-align:center">
-<div style="font-size:48px;margin-bottom:12px">&#x1F512;</div>
-<h1 style="font-family:Playfair Display,serif;font-size:24px;color:#1B3A5C;margin-bottom:4px">Studio Educatif</h1>
-<p style="font-size:12px;color:#6B7280;margin-bottom:24px">Acces reserve — Identifiez-vous</p>
-<input type="text" id="authUser" placeholder="Identifiant" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('authPass').focus()" style="width:100%;padding:12px 16px;border:1.5px solid #D6D0C6;border-radius:10px;font-size:14px;font-family:DM Sans,sans-serif;margin-bottom:10px;box-sizing:border-box;outline:none"/>
-<input type="password" id="authPass" placeholder="Mot de passe" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAuthLogin()" style="width:100%;padding:12px 16px;border:1.5px solid #D6D0C6;border-radius:10px;font-size:14px;font-family:DM Sans,sans-serif;margin-bottom:10px;box-sizing:border-box;outline:none"/>
-<button onclick="doAuthLogin()" style="width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,#1B3A5C,#2A5A8C);color:#fff;font-size:14px;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer;margin-top:6px">Se connecter</button>
-<div id="authErr" style="color:#C53030;font-size:11px;font-weight:600;margin-top:8px;display:none">Identifiants incorrects</div>
-<div style="font-size:9px;color:#6B7280;margin-top:16px;opacity:.6">Application protegee — Usage professionnel uniquement</div>
+<body>
+<div class="auth-info">Application protegee — Usage professionnel uniquement</div>
 </div>
 </div>
-<script data-cfasync="false">
-var AH='e37c4be9839b34fb95a4742b6cd48fab42f6e4e36f0cdceaecea615312232c82';async function sha256(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}async function doAuthLogin(){var u=document.getElementById('authUser').value.trim();var p=document.getElementById('authPass').value;if(!u||!p){document.getElementById('authErr').style.display='block';return}var hh=await sha256(u+':'+p);if(hh===AH){document.getElementById('authGate').style.display='none';try{sessionStorage.setItem('se_auth','1')}catch(e){}}else{document.getElementById('authErr').style.display='block';document.getElementById('authPass').value=''}}try{if(sessionStorage.getItem('se_auth')==='1')document.getElementById('authGate').style.display='none'}catch(e){}
-</script>
 
 <!-- OVERLAY SIDEBAR -->
 <div class="sb-ov" id="sbOv" onclick="closeSb()"></div>
@@ -446,6 +435,7 @@ var AH='e37c4be9839b34fb95a4742b6cd48fab42f6e4e36f0cdceaecea615312232c82';async 
   <p>La plateforme qui genere vos documents pedagogiques conformes aux exigences institutionnelles. Tous niveaux, toutes filieres.</p>
   <div class="land-btns">
     <button class="bt-land primary" onclick="showAuth('signup')">S'inscrire gratuitement</button>
+    <button class="bt-land secondary" onclick="scrollToDemo()">Decouvrir l'interface</button>
     <button class="bt-land secondary" onclick="showAuth('login')">Se connecter</button>
   </div>
   <div class="land-feats">
@@ -541,7 +531,7 @@ var AH='e37c4be9839b34fb95a4742b6cd48fab42f6e4e36f0cdceaecea615312232c82';async 
 <!-- AUTH BOX (login / inscription) -->
 <div id="authOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,37,64,.85);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center">
   <!-- LOGIN -->
-  <div class="auth-box show" id="authLogin">
+  <div class="ab-panel" id="authLogin" style="display:block">
     <h2>Connexion</h2>
     <div class="ab-sub">Accedez a votre espace Studio Educatif</div>
     <div class="fi" style="margin-bottom:10px"><label class="fl">Email academique</label><input class="fn" id="logEmail" placeholder="prenom.nom[at]ac-bordeaux.fr" style="font-size:14px"/></div>
@@ -551,7 +541,7 @@ var AH='e37c4be9839b34fb95a4742b6cd48fab42f6e4e36f0cdceaecea615312232c82';async 
     <div style="text-align:center;margin-top:10px"><a style="font-size:11px;color:var(--tl);cursor:pointer" onclick="hideAuth()">← Retour a l'accueil</a></div>
   </div>
   <!-- SIGNUP -->
-  <div class="auth-box" id="authSignup">
+  <div class="ab-panel" id="authSignup" style="display:none">
     <h2>Inscription</h2>
     <div class="ab-sub">Creez votre compte enseignant</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -1020,6 +1010,12 @@ var AH='e37c4be9839b34fb95a4742b6cd48fab42f6e4e36f0cdceaecea615312232c82';async 
 <nav class="bn"><div class="bni"><div class="bnit ac" data-pg="home" onclick="mN('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span>Accueil</span></div><div class="bnit" data-pg="biblio" onclick="mN('biblio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Biblio</span></div><div class="bnit" data-pg="drive" onclick="mN('drive')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 19h20L12 2z"/><path d="M7.5 12.5h9"/></svg><span>Drive</span></div><div class="bnit" data-pg="history" onclick="mN('history')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>Histo</span></div><div class="bnit" data-pg="tuto" onclick="mN('tuto')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/></svg><span>Aide</span></div></div></nav>
 <div class="to" id="toast"></div>
 <script>
+// ========== CONFIG ==========
+var WORKER_URL='https://studio-educatif-api.dbouisson1.workers.dev';
+
+
+function scrollToDemo(){document.getElementById('landingView').style.display='none';document.getElementById('dashView').style.display='block';toast('Mode demo — Inscrivez-vous pour generer !','ok')}
+
 // ========== AUTH SYSTEM ==========
 var CREATOR_EMAIL='david.bouisson'+String.fromCharCode(64)+'ac-bordeaux.fr';
 var ALLOWED_DOMAINS=['ac-bordeaux.fr','ac-toulouse.fr','ac-paris.fr','ac-lyon.fr','ac-lille.fr','ac-nantes.fr','ac-rennes.fr','ac-strasbourg.fr','ac-marseille.fr','ac-montpellier.fr','ac-grenoble.fr','ac-versailles.fr','ac-creteil.fr','ac-nice.fr','ac-poitiers.fr','ac-limoges.fr','ac-clermont.fr','ac-dijon.fr','ac-besancon.fr','ac-orleans-tours.fr','ac-amiens.fr','ac-rouen.fr','ac-caen.fr','ac-reims.fr','ac-nancy-metz.fr','ac-reunion.fr','ac-martinique.fr','ac-guadeloupe.fr','ac-guyane.fr','ac-mayotte.fr','ac-noumea.nc','ac-polynesie.pf','ac-wf.wf','ac-spm.fr','ac-corse.fr'];
@@ -1142,10 +1138,11 @@ async function doLogout(){
   // Cacher sidebar et bottom nav
   document.querySelector('.sb').classList.remove('op');
   toast('Deconnecte.','ok');
-  updateAuthUI();
+  document.body.classList.add('no-auth');
 }
 
 function applyLogin(){
+  document.body.classList.remove('no-auth');
   if(!curUser)return;
   document.getElementById('landingView').style.display='none';
   document.getElementById('dashView').style.display='block';
@@ -1372,6 +1369,7 @@ function renderMgFile(){
   act.style.display='block';
 }
 async function startMagic(){
+  if(!curUser){showAuth('signup');toast('Inscrivez-vous pour le bouton magique !','er');return}
   var canGen=await checkGenLimit();if(!canGen)return;
 
   if(!S.mgFile){toast('Chargez un document.','er');return}
@@ -1430,11 +1428,11 @@ async function startMagic(){
 
   // 5. Appel API Claude
   try{
-    var response=await fetch('https://api.anthropic.com/v1/messages',{
+    var response=await fetch(WORKER_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-5-20250929',
+        model:'mistral-small-latest',
         max_tokens:8000,
         system:systemPrompt,
         messages:[{role:'user',content:userMsg}]
@@ -1572,6 +1570,7 @@ function updR(){var tL={magistral:'Cours',tp:'TP',td:'TD'};var docs=[];document.
   document.getElementById('recap').innerHTML=html;
 }
 async function startGen(){
+  if(!curUser){showAuth('signup');toast('Inscrivez-vous pour generer !','er');return}
   var canGen=await checkGenLimit();if(!canGen)return;
 
   var ov=document.getElementById('gOv'),st=document.getElementById('gSt'),si=document.getElementById('gSi');
@@ -1654,11 +1653,11 @@ async function startGen(){
   st.textContent='Generation IA en cours...';si.textContent='2/3';
 
   try{
-    var response=await fetch('https://api.anthropic.com/v1/messages',{
+    var response=await fetch(WORKER_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-5-20250929',
+        model:'mistral-small-latest',
         max_tokens:8000,
         system:systemPrompt,
         messages:[{role:'user',content:userMsg}]
@@ -2266,7 +2265,8 @@ function buildHome(){
 // INIT
 initCvLvSel();buildGallery();
 initBibTabs();
-loadBib().then(function(){renderBib2();buildHome()});
+
+if(!curUser)document.body.classList.add('no-auth');
 
 // ========== CHATBOT IA ==========
 var cbHistory=[];var cbBusy=false;
@@ -2290,8 +2290,8 @@ async function cbSend(){
   sp+="Reponds concis, precis, actionnable. Cite les sources. Max 250 mots. Utilise **gras** pour les points cles.";
   var msgs=cbHistory.slice(-10);
   try{
-    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5-20250929',max_tokens:1500,system:sp,messages:msgs})});
+    var res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'mistral-small-latest',max_tokens:1500,system:sp,messages:msgs})});
     var data=await res.json();var reply='';
     if(data.content&&data.content[0]&&data.content[0].text){reply=data.content[0].text}
     else if(data.error){reply='Erreur : '+(data.error.message||'inconnue')}
@@ -2371,4 +2371,14 @@ function nextOnboard(){obStep++;if(obStep>3){closeOnboard();return}for(var i=1;i
 async function closeOnboard(){document.getElementById('obOv').style.display='none';if(curUser){curUser.onboarded=true;var us=await loadUsers();var ix=us.findIndex(function(x){return x.email===curUser.email});if(ix>=0)us[ix].onboarded=true;await saveUsers(us);await saveSession()}}
 async function checkOnboard(){if(curUser&&!curUser.onboarded){document.getElementById('obOv').style.display='flex'}}
 
-function showLegal(n){for(var i=1;i<=3;i++){document.getElementById('lgS'+i).style.display='none';document.getElementById('lgT'+i).className='bt bt-s bt-sm'}do
+function showLegal(n){for(var i=1;i<=3;i++){document.getElementById('lgS'+i).style.display='none';document.getElementById('lgT'+i).className='bt bt-s bt-sm'}document.getElementById('lgS'+n).style.display='block';document.getElementById('lgT'+n).className='bt bt-sm act'}
+function doLegalNav(){if(curUser){nav('legal')}else{document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('ac')});document.getElementById('pg-legal').classList.add('ac');document.getElementById('landingView').style.display='none';document.getElementById('dashView').style.display='none';document.getElementById('pg-legal').style.display='block'}}
+function printPg(id){var el=document.getElementById(id);if(!el)return;var w=window.open('','_blank');w.document.write('<html><head><style>*{margin:0;padding:0}@page{size:A4;margin:0}@media print{body{padding:0}}</style></head><body>');w.document.write(el.outerHTML.replace('class="pgp"','style="width:210mm;min-height:297mm;border:none;border-radius:0;box-shadow:none;position:relative;display:flex;flex-direction:column"'));w.document.write('</body></html>');w.document.close();setTimeout(function(){w.print()},300)}
+var demoMode=false;
+function enterDemo(){demoMode=true;document.getElementById('landingView').style.display='none';document.getElementById('dashView').style.display='block';document.body.classList.remove('no-auth');toast('Mode demo — Inscrivez-vous pour generer !','ok')}
+async function ensureCreatorAccount(){var us=await loadUsers();var em='david.bouisson'+String.fromCharCode(64)+'ac-bordeaux.fr';var cr=us.find(function(u){return u.email===em});if(!cr){us.push({first:'David',last:'Bouisson',email:em,role:'creator',date:new Date().toLocaleDateString('fr-FR'),cycle:'lycee_pro',niveaux:['seconde','premiere','terminale'],domaine:'pro',matieres:['Electrotechnique','Genie electrique'],spec:'MELEC',etab:'Lycee Peguy Eysines',academie:'ac-bordeaux.fr',genCount:0,onboarded:true});await saveUsers(us);console.log('Creator OK')}}
+(async function init(){await loadSession();if(curUser)applyLogin();loadBib().then(function(){renderBib2();buildHome()});ensureCreatorAccount();if(!curUser)document.body.classList.add('no-auth')})()
+
+</script>
+</body>
+</html>
