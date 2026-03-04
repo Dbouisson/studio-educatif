@@ -1600,17 +1600,38 @@ async function startGen(){
   }
 
   // 3. Construire le prompt système
-  var systemPrompt='Tu es un expert en ingenierie pedagogique pour l\'Education nationale francaise, specialise dans l\'enseignement professionnel et technique.\n';
-  systemPrompt+='Tu generes des documents pedagogiques COMPLETS, DETAILLES et PROFESSIONNELS.\n';
-  systemPrompt+='\nEXIGENCES DE QUALITE :\n';
-  systemPrompt+='- Chaque activite doit contenir des consignes PRECISES et DETAILLEES (minimum 3-4 phrases)\n';
-  systemPrompt+='- Inclure des schemas, tableaux ou listes techniques quand pertinent\n';
-  systemPrompt+='- Les contenus doivent etre directement utilisables en classe, pas generiques\n';
-  systemPrompt+='- Utiliser le vocabulaire technique exact de la specialite\n';
-  systemPrompt+='- Minimum 5-6 activites par fiche eleve, progressives en difficulte\n';
-  systemPrompt+='- Chaque fiche prof doit detailler au moins 6 phases de deroulement\n';
-  systemPrompt+='- QCM : minimum 5 questions variees (pas uniquement des definitions)\n';
-  systemPrompt+='\n';
+  var systemPrompt='Tu es un ingenieur pedagogique expert de l\'Education nationale francaise, specialise en enseignement professionnel et technique.\n';
+  systemPrompt+='Tu crees des documents pedagogiques COMPLETS, DETAILLES, ATTRACTIFS et IMMEDIATEMENT UTILISABLES en classe.\n\n';
+  
+  systemPrompt+='=== PRINCIPES PEDAGOGIQUES OBLIGATOIRES ===\n';
+  systemPrompt+='1. SITUATION PROFESSIONNELLE CONCRETE : Chaque seance doit partir d\'un SCENARIO REEL (ex: "Vous etes electricien chez ENGIE, un client vous demande de...", "L\'entreprise SPIE vous confie la mise aux normes de...")\n';
+  systemPrompt+='2. APPORT DE NOTIONS : Chaque activite doit ENSEIGNER quelque chose de precis (formule, norme, methode, vocabulaire technique). Les notions doivent etre EXPLIQUEES, pas juste mentionnees.\n';
+  systemPrompt+='3. ATTRACTIVITE : Utiliser des mises en situation engageantes, des defis, des enigmes techniques, des cas concrets du quotidien des eleves.\n';
+  systemPrompt+='4. PROGRESSIVITE : Activites de difficulte croissante - decouverte (manipuler/observer) > application (reproduire/calculer) > approfondissement (analyser/concevoir)\n';
+  systemPrompt+='5. TEMPS DE CORRECTION : Chaque activite doit inclure un temps de correction collective ou d\'auto-correction. Prevoir explicitement "X min travail eleve + Y min correction" dans chaque duree.\n';
+  systemPrompt+='6. DIFFERENCIATION : Pour chaque activite, prevoir une aide pour les eleves en difficulte ET un prolongement pour les plus rapides.\n';
+  systemPrompt+='7. TRACES ECRITES : L\'eleve doit toujours avoir quelque chose a ecrire, dessiner, completer ou calculer.\n\n';
+  
+  systemPrompt+='=== STRUCTURE DES ACTIVITES (obligatoire) ===\n';
+  systemPrompt+='Chaque activite doit contenir :\n';
+  systemPrompt+='- Un TITRE engageant (pas "Activite 1" mais "Defi 1 : Identifier les protections du tableau")\n';
+  systemPrompt+='- Un OBJECTIF clair ("A la fin de cette activite, tu seras capable de...")\n';
+  systemPrompt+='- Les NOTIONS APPORTEES (encadre pedagogique avec la theorie/formule/regle a retenir)\n';
+  systemPrompt+='- La CONSIGNE detaillee en etapes numerotees (minimum 4 etapes)\n';
+  systemPrompt+='- Le MATERIEL necessaire avec references precises (ex: "Disjoncteur Schneider Acti9 iC60N 16A courbe C")\n';
+  systemPrompt+='- La DUREE ventilee : temps travail + temps correction (ex: "20 min travail + 10 min correction collective")\n';
+  systemPrompt+='- Les CRITERES DE REUSSITE observables\n';
+  systemPrompt+='- Une AIDE pour eleves en difficulte\n';
+  systemPrompt+='- Un PROLONGEMENT pour les plus rapides\n\n';
+  
+  systemPrompt+='=== QUALITE DU CONTENU ===\n';
+  systemPrompt+='- Minimum 6 activites par fiche eleve, duree totale coherente avec la seance\n';
+  systemPrompt+='- QCM : minimum 6 questions techniques variees (calcul, schema, norme, securite, identification materiel)\n';
+  systemPrompt+='- Fiche prof : minimum 8 phases de deroulement avec timing precis heure par heure\n';
+  systemPrompt+='- Inclure des tableaux a completer, des schemas a annoter, des calculs a effectuer\n';
+  systemPrompt+='- Les reponses attendues doivent etre DETAILLEES dans la fiche prof (pas juste "voir correction")\n';
+  systemPrompt+='- Utiliser le vocabulaire technique EXACT (pas d\'approximations)\n\n';
+  
   systemPrompt+='NIVEAU : '+niveau+'\n';
   systemPrompt+='REFERENTIELS ET NORMES DISPONIBLES :\n'+refs.map(function(r){return '- '+r}).join('\n')+'\n\n';
   systemPrompt+='OBLIGATIONS INSTITUTIONNELLES :\n';
@@ -1621,33 +1642,49 @@ async function startGen(){
   if(curUser&&curUser.spec){
     systemPrompt+='SPECIALITE ENSEIGNANT : '+curUser.spec+'\n';
     if(curUser.spec==='MELEC'||curUser.matieres&&(curUser.matieres.indexOf('Electrotechnique')>=0||curUser.matieres.indexOf('Genie electrique')>=0)){
-      systemPrompt+='\nSOURCES ET REFERENTIELS MELEC A UTILISER :\n';
-      systemPrompt+='- Referentiel Bac Pro MELEC (Metiers de l\'Electricite et de ses Environnements Connectes)\n';
-      systemPrompt+='- NFC 15-100 (installations electriques basse tension)\n';
-      systemPrompt+='- NFC 18-510 (operations sur les ouvrages et installations electriques, habilitations)\n';
-      systemPrompt+='- NFC 13-100 (postes de livraison HTA/BT)\n';
-      systemPrompt+='- NFC 14-100 (installations de branchement)\n';
-      systemPrompt+='- UTE C 15-520 (canalisations), UTE C 15-559 (photovoltaique)\n';
-      systemPrompt+='\nFABRICANTS ET EQUIPEMENTS DE REFERENCE :\n';
-      systemPrompt+='- Schneider Electric : appareillage modulaire (Acti9 iC60, iID, iC40), tableaux Prisma, variateurs Altivar, automates Modicon M221/M241, systeme KNX Wiser, coffrets Kaedra, prises Unica, Odace\n';
-      systemPrompt+='- Legrand : appareillage modulaire (DNX3, DX3, DRX), tableaux Drivia/XL3, chemin de cables Cablofil, prises Mosaic, Celiane, Dooxie, systeme connecte Netatmo\n';
-      systemPrompt+='- Hager : appareillage modulaire (MFN/MFS/MCN), tableaux Gamma, systeme domotique TXA/TXM (KNX)\n';
-      systemPrompt+='- ABB : appareillage S200/F200, variateurs ACS, automates AC500\n';
-      systemPrompt+='- Siemens : automates LOGO!, S7-1200, variateurs Sinamics, appareillage 5SY\n';
-      systemPrompt+='- Phoenix Contact : bornes de raccordement, alimentations QUINT, parafoudres\n';
-      systemPrompt+='- Wago : bornes de connexion 221/222/2273, systeme domotique\n';
-      systemPrompt+='- Chauvin Arnoux / Fluke : appareils de mesure (multimetres, pinces amperemetriques, tellurometre, controleur d\'installation)\n';
-      systemPrompt+='\nRESSOURCES PEDAGOGIQUES EN LIGNE :\n';
-      systemPrompt+='- Eduscol : fiches ressources Bac Pro MELEC, reperes de formation\n';
-      systemPrompt+='- Sites academiques : ac-bordeaux.fr, ac-toulouse.fr, ac-lyon.fr (sections STI/electrotechnique)\n';
-      systemPrompt+='- Schneider Electric - Formation : se.com/fr (schemas, guides techniques, catalogues)\n';
-      systemPrompt+='- Legrand - Espace pro : legrand.fr (guides choix, schemas, normes)\n';
-      systemPrompt+='\nUTILISE ces references concretes dans les documents : cite les normes exactes, les references produit, les schemas de cablage reels. Le document doit etre TECHNIQUE et PROFESSIONNEL, pas generique.\n';
+      systemPrompt+='\n=== REFERENTIEL MELEC - SOURCES OBLIGATOIRES ===\n';
+      systemPrompt+='TACHES PROFESSIONNELLES du referentiel :\n';
+      systemPrompt+='- T1 : Preparation des operations (etude, planification, approvisionnement)\n';
+      systemPrompt+='- T2 : Realisation (implantation, pose, cablage, raccordement)\n';
+      systemPrompt+='- T3 : Mise en service (verifications, reglages, parametrages, essais)\n';
+      systemPrompt+='- T4 : Maintenance (preventive et depannage)\n';
+      systemPrompt+='- T5 : Communication (dossier technique, explication fonctionnement, conseil client)\n\n';
+      systemPrompt+='NORMES ELECTRIQUES A CITER PRECISEMENT :\n';
+      systemPrompt+='- NFC 15-100 : installations electriques basse tension (sections cables, protections, volumes SdB, GTL)\n';
+      systemPrompt+='- NFC 18-510 : operations sur ouvrages electriques et habilitations (B0, B1V, B2V, BR, BC, BE)\n';
+      systemPrompt+='- NFC 13-100 : postes de livraison HTA/BT\n';
+      systemPrompt+='- NFC 14-100 : installations de branchement (TGBT, disjoncteur abonne)\n';
+      systemPrompt+='- UTE C 15-520 : canalisations (modes de pose, courants admissibles)\n';
+      systemPrompt+='- UTE C 15-559 : installations photovoltaiques\n\n';
+      systemPrompt+='FABRICANTS ET REFERENCES PRODUITS A UTILISER :\n';
+      systemPrompt+='- Schneider Electric : disjoncteurs Acti9 iC60N (C10/C16/C20/C32), interrupteurs differentiels iID (30mA type A/AC), contacteurs CT (CT 25A), telerupteur iTL, horloge IHP, tableau Pragma, coffret Kaedra, variateur Altivar ATV310, automate Modicon M221/M241, systeme KNX Wiser\n';
+      systemPrompt+='- Legrand : disjoncteurs DNX3 (C10/C16/C20), inter diff DX3 (30mA), contacteur de puissance CX3, telerupteur CX3, tableau Drivia 13/18, coffret Plexo, GTL Drivia, prises Mosaic/Celiane/Dooxie, systeme Netatmo\n';
+      systemPrompt+='- Hager : disjoncteurs MFN/MFS (C10/C16/C20), inter diff CDx (30mA), tableau Gamma 13/18, appareillage Kallysta/Systo\n';
+      systemPrompt+='- ABB : disjoncteurs S200, inter diff F200, variateurs ACS\n';
+      systemPrompt+='- Siemens : automates LOGO!, S7-1200, variateurs Sinamics\n';
+      systemPrompt+='- Wago : bornes 221/222/2273 (connexion rapide)\n';
+      systemPrompt+='- Chauvin Arnoux : multimetre C.A 5273, pince MX 670, controleur XL3, tellurometre CA 6424\n';
+      systemPrompt+='- Fluke : multimetre Fluke 117, pince i400s\n\n';
+      systemPrompt+='RESSOURCES PEDAGOGIQUES :\n';
+      systemPrompt+='- Eduscol STI : fiches ressources Bac Pro MELEC, reperes de formation, sujets examen\n';
+      systemPrompt+='- Sites academiques : ac-bordeaux, ac-toulouse, ac-lyon, ac-versailles (sections electrotechnique)\n';
+      systemPrompt+='- Electrotoile.eu : TP de reference, exercices, QCM\n';
+      systemPrompt+='- Schneider Electric formation : se.com/fr - guides techniques, schemas, catalogues\n';
+      systemPrompt+='- Legrand pro : legrand.fr - guides de choix, schemas de cablage\n\n';
+      systemPrompt+='UTILISE ces references concretes : cite les normes exactes (ex: "selon NFC 15-100 tableau 771.5.3.3"), les references produit precises (ex: "disjoncteur Schneider iC60N C16 ref A9F77616"), les schemas de cablage reels. Le document doit etre TECHNIQUE et PROFESSIONNEL.\n\n';
+      systemPrompt+='EXEMPLES DE SITUATIONS PROFESSIONNELLES MELEC :\n';
+      systemPrompt+='- Installation electrique habitat : "Vous realisez l\'installation electrique de l\'appartement T3 de Mme MARTIN"\n';
+      systemPrompt+='- Tertiaire : "Le cabinet medical Dr DURAND necessite une mise aux normes electrique"\n';
+      systemPrompt+='- Industriel : "L\'usine AIRBUS vous confie le cablage d\'une armoire de commande moteur"\n';
+      systemPrompt+='- Domotique/KNX : "M. LOPEZ souhaite domotiser son pavillon avec le systeme Wiser de Schneider"\n';
+      systemPrompt+='- Photovoltaique : "Installation d\'une centrale PV 3kWc en autoconsommation chez M. BERGER"\n';
+      systemPrompt+='- IRVE : "Installation d\'une borne de recharge VE Schneider EVlink dans le parking du supermarche"\n';
+      systemPrompt+='- Maintenance : "Panne sur le circuit eclairage du magasin - diagnostic et depannage"\n\n';
     }
   }
   if(curUser&&curUser.matieres&&curUser.matieres.length)systemPrompt+='MATIERES : '+curUser.matieres.join(', ')+'\n';
   if(curUser&&curUser.etab)systemPrompt+='ETABLISSEMENT : '+curUser.etab+'\n';
-  if(S.type==='tp')systemPrompt+='- Securite et sante au travail (EPI, risques, habilitation)\n';
+  if(S.type==='tp')systemPrompt+='- Securite et sante au travail (EPI, risques, habilitation).\n Pour les TP, TOUJOURS inclure : analyse des risques, EPI necessaires, consignes de securite, verification d\'absence de tension (VAT).\n';
   systemPrompt+='\nREPONDS EN JSON VALIDE selon le schema suivant.\n';
 
   // 4. Construire le schéma JSON selon les docs choisis
@@ -1675,20 +1712,25 @@ async function startGen(){
   systemPrompt+='\nIMPORTANT : Genere du contenu RICHE, DETAILLE et PEDAGOGIQUEMENT SOLIDE. Pas de placeholder ni de texte generique. Adapte le vocabulaire et la complexite au niveau '+niveau+'.';
 
   // 5. Construire le message utilisateur
-  var userMsg='Genere des documents COMPLETS et DETAILLES pour :\n';
+  var userMsg='GENERE des documents COMPLETS, DETAILLES et ATTRACTIFS pour :\n';
   userMsg+='- Titre : '+titre+'\n';
-  userMsg+='- Type : '+typeCours+' ('+duree+')\n';
+  userMsg+='- Type : '+typeCours+' (duree totale : '+duree+')\n';
   userMsg+='- Classe : '+classe+'\n';
-  userMsg+='- N° fiche : '+numFiche+'\n';
+  userMsg+='- N fiche : '+numFiche+'\n';
   if(competences)userMsg+='- Competences visees : '+competences+'\n';
   if(objectifs)userMsg+='- Objectifs pedagogiques : '+objectifs+'\n';
   if(contexte)userMsg+='- Contexte et situation professionnelle : '+contexte+'\n';
-  userMsg+='\nINSTRUCTIONS IMPORTANTES :\n';
-  userMsg+='- Developpe CHAQUE section en detail (pas de reponses courtes ou generiques)\n';
-  userMsg+='- Inclus des references precises aux normes, equipements et fabricants\n';
-  userMsg+='- Les activites doivent etre progressives : decouverte > application > approfondissement\n';
-  userMsg+='- Ajoute des consignes de securite specifiques quand pertinent\n';
-  userMsg+='- Le QCM doit tester la comprehension technique, pas juste les definitions\n';
+  userMsg+='\n=== INSTRUCTIONS CRITIQUES ===\n';
+  userMsg+='1. COMMENCE par une SITUATION PROFESSIONNELLE engageante et realiste (un scenario concret avec un client, une entreprise, un chantier)\n';
+  userMsg+='2. Chaque activite doit ENSEIGNER une notion precise : explique la theorie/formule/regle DANS l\'activite avant de demander a l\'eleve de l\'appliquer\n';
+  userMsg+='3. VENTILE les temps : pour chaque activite, indique "X min travail eleve + Y min correction collective = Z min total"\n';
+  userMsg+='4. Verifie que la SOMME des temps = duree totale de la seance ('+duree+')\n';
+  userMsg+='5. INCLUS des tableaux a completer, schemas a annoter, calculs a effectuer (pas juste du texte)\n';
+  userMsg+='6. References PRECISES : cite les normes exactes, les references produit avec fabricant\n';
+  userMsg+='7. QCM : 6 questions minimum, variees (calcul, schema, norme, securite, identification)\n';
+  userMsg+='8. Fiche prof : reponses COMPLETES attendues pour chaque activite, pas juste "voir correction"\n';
+  userMsg+='9. Auto-evaluation : competences du referentiel avec criteres observables\n';
+  userMsg+='10. DIFFERENCIATION : aide pour eleves en difficulte + prolongement pour les rapides\n';
 
   // 6. Appel API Claude réel
   st.textContent='Generation IA en cours...';si.textContent='2/3';
