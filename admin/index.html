@@ -1433,7 +1433,7 @@ async function startMagic(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'mistral-small-latest',
-        max_tokens:8000,
+        max_tokens:16000,
         system:systemPrompt,
         messages:[{role:'user',content:userMsg}]
       })
@@ -1600,8 +1600,17 @@ async function startGen(){
   }
 
   // 3. Construire le prompt système
-  var systemPrompt='Tu es un expert en ingenierie pedagogique pour l\'Education nationale francaise.\n';
-  systemPrompt+='Tu generes des documents pédagogiques de haute qualite.\n\n';
+  var systemPrompt='Tu es un expert en ingenierie pedagogique pour l\'Education nationale francaise, specialise dans l\'enseignement professionnel et technique.\n';
+  systemPrompt+='Tu generes des documents pedagogiques COMPLETS, DETAILLES et PROFESSIONNELS.\n';
+  systemPrompt+='\nEXIGENCES DE QUALITE :\n';
+  systemPrompt+='- Chaque activite doit contenir des consignes PRECISES et DETAILLEES (minimum 3-4 phrases)\n';
+  systemPrompt+='- Inclure des schemas, tableaux ou listes techniques quand pertinent\n';
+  systemPrompt+='- Les contenus doivent etre directement utilisables en classe, pas generiques\n';
+  systemPrompt+='- Utiliser le vocabulaire technique exact de la specialite\n';
+  systemPrompt+='- Minimum 5-6 activites par fiche eleve, progressives en difficulte\n';
+  systemPrompt+='- Chaque fiche prof doit detailler au moins 6 phases de deroulement\n';
+  systemPrompt+='- QCM : minimum 5 questions variees (pas uniquement des definitions)\n';
+  systemPrompt+='\n';
   systemPrompt+='NIVEAU : '+niveau+'\n';
   systemPrompt+='REFERENTIELS ET NORMES DISPONIBLES :\n'+refs.map(function(r){return '- '+r}).join('\n')+'\n\n';
   systemPrompt+='OBLIGATIONS INSTITUTIONNELLES :\n';
@@ -1609,7 +1618,33 @@ async function startGen(){
   systemPrompt+='- Differenciation pedagogique (3 niveaux : guide, standard, expert)\n';
   systemPrompt+='- Evaluation par competences\n';
   systemPrompt+='- Inclusion et accessibilite\n';
-  if(curUser&&curUser.spec)systemPrompt+='SPECIALITE ENSEIGNANT : '+curUser.spec+'\n';
+  if(curUser&&curUser.spec){
+    systemPrompt+='SPECIALITE ENSEIGNANT : '+curUser.spec+'\n';
+    if(curUser.spec==='MELEC'||curUser.matieres&&(curUser.matieres.indexOf('Electrotechnique')>=0||curUser.matieres.indexOf('Genie electrique')>=0)){
+      systemPrompt+='\nSOURCES ET REFERENTIELS MELEC A UTILISER :\n';
+      systemPrompt+='- Referentiel Bac Pro MELEC (Metiers de l\'Electricite et de ses Environnements Connectes)\n';
+      systemPrompt+='- NFC 15-100 (installations electriques basse tension)\n';
+      systemPrompt+='- NFC 18-510 (operations sur les ouvrages et installations electriques, habilitations)\n';
+      systemPrompt+='- NFC 13-100 (postes de livraison HTA/BT)\n';
+      systemPrompt+='- NFC 14-100 (installations de branchement)\n';
+      systemPrompt+='- UTE C 15-520 (canalisations), UTE C 15-559 (photovoltaique)\n';
+      systemPrompt+='\nFABRICANTS ET EQUIPEMENTS DE REFERENCE :\n';
+      systemPrompt+='- Schneider Electric : appareillage modulaire (Acti9 iC60, iID, iC40), tableaux Prisma, variateurs Altivar, automates Modicon M221/M241, systeme KNX Wiser, coffrets Kaedra, prises Unica, Odace\n';
+      systemPrompt+='- Legrand : appareillage modulaire (DNX3, DX3, DRX), tableaux Drivia/XL3, chemin de cables Cablofil, prises Mosaic, Celiane, Dooxie, systeme connecte Netatmo\n';
+      systemPrompt+='- Hager : appareillage modulaire (MFN/MFS/MCN), tableaux Gamma, systeme domotique TXA/TXM (KNX)\n';
+      systemPrompt+='- ABB : appareillage S200/F200, variateurs ACS, automates AC500\n';
+      systemPrompt+='- Siemens : automates LOGO!, S7-1200, variateurs Sinamics, appareillage 5SY\n';
+      systemPrompt+='- Phoenix Contact : bornes de raccordement, alimentations QUINT, parafoudres\n';
+      systemPrompt+='- Wago : bornes de connexion 221/222/2273, systeme domotique\n';
+      systemPrompt+='- Chauvin Arnoux / Fluke : appareils de mesure (multimetres, pinces amperemetriques, tellurometre, controleur d\'installation)\n';
+      systemPrompt+='\nRESSOURCES PEDAGOGIQUES EN LIGNE :\n';
+      systemPrompt+='- Eduscol : fiches ressources Bac Pro MELEC, reperes de formation\n';
+      systemPrompt+='- Sites academiques : ac-bordeaux.fr, ac-toulouse.fr, ac-lyon.fr (sections STI/electrotechnique)\n';
+      systemPrompt+='- Schneider Electric - Formation : se.com/fr (schemas, guides techniques, catalogues)\n';
+      systemPrompt+='- Legrand - Espace pro : legrand.fr (guides choix, schemas, normes)\n';
+      systemPrompt+='\nUTILISE ces references concretes dans les documents : cite les normes exactes, les references produit, les schemas de cablage reels. Le document doit etre TECHNIQUE et PROFESSIONNEL, pas generique.\n';
+    }
+  }
   if(curUser&&curUser.matieres&&curUser.matieres.length)systemPrompt+='MATIERES : '+curUser.matieres.join(', ')+'\n';
   if(curUser&&curUser.etab)systemPrompt+='ETABLISSEMENT : '+curUser.etab+'\n';
   if(S.type==='tp')systemPrompt+='- Securite et sante au travail (EPI, risques, habilitation)\n';
@@ -1640,14 +1675,20 @@ async function startGen(){
   systemPrompt+='\nIMPORTANT : Genere du contenu RICHE, DETAILLE et PEDAGOGIQUEMENT SOLIDE. Pas de placeholder ni de texte generique. Adapte le vocabulaire et la complexite au niveau '+niveau+'.';
 
   // 5. Construire le message utilisateur
-  var userMsg='Genere les documents pour :\n';
+  var userMsg='Genere des documents COMPLETS et DETAILLES pour :\n';
   userMsg+='- Titre : '+titre+'\n';
   userMsg+='- Type : '+typeCours+' ('+duree+')\n';
   userMsg+='- Classe : '+classe+'\n';
   userMsg+='- N° fiche : '+numFiche+'\n';
-  if(competences)userMsg+='- Competences : '+competences+'\n';
-  if(objectifs)userMsg+='- Objectifs : '+objectifs+'\n';
-  if(contexte)userMsg+='- Contexte : '+contexte+'\n';
+  if(competences)userMsg+='- Competences visees : '+competences+'\n';
+  if(objectifs)userMsg+='- Objectifs pedagogiques : '+objectifs+'\n';
+  if(contexte)userMsg+='- Contexte et situation professionnelle : '+contexte+'\n';
+  userMsg+='\nINSTRUCTIONS IMPORTANTES :\n';
+  userMsg+='- Developpe CHAQUE section en detail (pas de reponses courtes ou generiques)\n';
+  userMsg+='- Inclus des references precises aux normes, equipements et fabricants\n';
+  userMsg+='- Les activites doivent etre progressives : decouverte > application > approfondissement\n';
+  userMsg+='- Ajoute des consignes de securite specifiques quand pertinent\n';
+  userMsg+='- Le QCM doit tester la comprehension technique, pas juste les definitions\n';
 
   // 6. Appel API Claude réel
   st.textContent='Generation IA en cours...';si.textContent='2/3';
