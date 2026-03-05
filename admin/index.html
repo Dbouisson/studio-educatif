@@ -306,6 +306,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);min-he
 .lv-arr{width:22px;height:22px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;transition:transform .2s}
 .lv-card2:hover .lv-arr{transform:translateX(3px)}
 .hm-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+
+.cv-col{width:28px;height:28px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.cv-col:hover{transform:scale(1.15)}
+.cv-col.sel{border-color:#fff;box-shadow:0 0 0 2px var(--p)}
 .hm-qk{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 10px;border-radius:12px;border:1.5px solid var(--bd);cursor:pointer;transition:all .2s;background:var(--bgc)}
 .hm-qk:hover{border-color:var(--pl);box-shadow:var(--s);transform:translateY(-2px)}
 .hm-qk:active{transform:scale(.95)}
@@ -697,6 +701,7 @@ body.no-auth .mn{margin-left:0!important}
   <div class="cbg">
     <div class="cb ck" onclick="togC(this)" data-doc="fiche_eleve"><div class="bx"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3"/></svg></div>📘 Fiche Eleve</div>
     <div class="cb ck" onclick="togC(this)" data-doc="fiche_prof"><div class="bx"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3"/></svg></div>📕 Fiche Prof</div>
+    <div class="cb" onclick="togC(this)" data-doc="page_garde"><div class="bx"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3"/></svg></div>📄 Page de garde</div>
     <div class="cb ck" onclick="togC(this)" data-doc="fiche_prepa"><div class="bx"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3"/></svg></div>📗 Fiche Prepa</div>
     <div class="cb" onclick="togC(this)" data-doc="activite_tp"><div class="bx"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3"/></svg></div>🔧 Activite TP</div>
   </div>
@@ -767,74 +772,129 @@ body.no-auth .mn{margin-left:0!important}
 
 <!-- PAGES DE GARDE -->
 <div class="pg" id="pg-covers">
-<div class="tb"><div class="tbl"><button class="hb" onclick="togSb()"><span></span><span></span><span></span></button><div class="tbt">📄 Pages de garde</div></div></div>
+<div class="tb"><div class="tbl"><button class="hb" onclick="togSb()"><span></span><span></span><span></span></button><div class="tbt">Pages de garde</div></div></div>
 <div class="ct">
-<div class="cd">
-  <div class="cdt">🎓 Sélectionnez le niveau et le type</div>
-  <div class="cds">Chaque combinaison niveau + document dispose de sa page de garde</div>
-  <div style="margin-bottom:14px">
-    <div class="fl" style="margin-bottom:6px">Niveau</div>
-    <div class="pg-sel" id="cvLvSel"></div>
-  </div>
-  <div>
-    <div class="fl" style="margin-bottom:6px">Type de document</div>
-    <div class="pg-sel" id="cvTpSel">
-      <button class="bt bt-s bt-sm" onclick="selCvTp('fiche_eleve')">📘 Fiche Eleve</button>
-      <button class="bt bt-s bt-sm" onclick="selCvTp('fiche_prof')">📕 Fiche Prof</button>
-      <button class="bt bt-s bt-sm" onclick="selCvTp('fiche_prepa')">📗 Fiche Prepa</button>
-      <button class="bt bt-s bt-sm" onclick="selCvTp('activite_tp')">🔧 Activite TP</button>
-    </div>
-  </div>
-</div>
 
-<!-- Preview -->
-<div class="cd" id="cvPreview" style="display:none">
-  <div class="cdt">👁 Apercu de la page de garde</div>
-  <div class="cds" id="cvDesc"></div>
-  <div class="pgp-wrap">
-    <div class="pgp" id="cvPage">
-      <div class="pgp-hd" id="cvHd">
-        <div class="pgp-logo" id="cvLogo">CP</div>
-        <div class="pgp-lyc"><b id="cvLycNm">Lycee Charles Peguy</b><span id="cvLycVille">Eysines</span><br><span id="cvLycFil"></span></div>
-      </div>
-      <div class="pgp-body">
-        <div class="pgp-niv" id="cvNiv">🟢 Seconde T.N.E</div>
-        <div class="pgp-titre" id="cvTitre">Fiche Eleve</div>
-        <div class="pgp-sub" id="cvSub">Document de travail</div>
-        <div class="pgp-type" id="cvType" style="background:var(--p)">📘 Cours</div>
-        <div class="pgp-info">
-          <div class="pgp-inf"><div class="k">Enseignant</div><div class="v" id="cvProf">David Bouisson</div></div>
-          <div class="pgp-inf"><div class="k">Annee scolaire</div><div class="v" id="cvYear">2025 — 2026</div></div>
-          <div class="pgp-inf"><div class="k">Classe</div><div class="v" id="cvClasse">—</div></div>
-          <div class="pgp-inf"><div class="k">Fiche N°</div><div class="v" id="cvFiche">—</div></div>
+<!-- CRÉATEUR DE PAGE DE GARDE -->
+<div class="cd">
+  <div class="cdt">Créer une page de garde</div>
+  <div class="cds">Style professionnel inspiré des documents du Lycée Charles Péguy</div>
+  <div class="fg" style="margin-top:12px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="fi"><label class="fl">Nom du lycée</label><input class="fn" id="cvLycee" value="Lycée Charles Péguy — Eysines" oninput="refreshCover()"/></div>
+      <div class="fi"><label class="fl">Filière</label><input class="fn" id="cvFiliere" value="Bac Pro MELEC" oninput="refreshCover()"/></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px">
+      <div class="fi"><label class="fl">Titre du document</label><input class="fn" id="cvTitrePG" placeholder="Ex: Démarrage Direct" oninput="refreshCover()"/></div>
+      <div class="fi"><label class="fl">Type</label><select class="fn" id="cvTypePG" onchange="refreshCover()"><option value="activite_tp">Activité / TP Élève</option><option value="cours">Document Élève — Cours</option><option value="fiche_prof">Fiche de Séance — Professeur</option><option value="dossier_tech">Dossier Technique</option><option value="dossier_ressources">Dossier Ressources</option><option value="evaluation">Évaluation</option></select></div>
+      <div class="fi"><label class="fl">N° Fiche</label><input class="fn" id="cvNumPG" placeholder="Ex: F24" oninput="refreshCover()"/></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px">
+      <div class="fi"><label class="fl">Classe</label><input class="fn" id="cvClassePG" placeholder="Ex: PREMIÈRE" oninput="refreshCover()"/></div>
+      <div class="fi"><label class="fl">Année scolaire</label><input class="fn" id="cvAnneePG" placeholder="À compléter par l'élève" oninput="refreshCover()"/></div>
+      <div class="fi"><label class="fl">Enseignant</label><input class="fn" id="cvProfPG" oninput="refreshCover()"/></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+      <div class="fi"><label class="fl">Thème / Sous-titre</label><input class="fn" id="cvThemePG" placeholder="Ex: Risque Électrique" oninput="refreshCover()"/></div>
+      <div class="fi"><label class="fl">Couleur du bandeau</label>
+        <div style="display:flex;gap:6px;margin-top:4px" id="cvColors">
+          <div class="cv-col sel" data-c="#2A5A8C" onclick="pickCvCol(this)" style="background:#2A5A8C" title="Bleu pro"></div>
+          <div class="cv-col" data-c="#6B3FA0" onclick="pickCvCol(this)" style="background:#6B3FA0" title="Violet"></div>
+          <div class="cv-col" data-c="#1B7340" onclick="pickCvCol(this)" style="background:#1B7340" title="Vert"></div>
+          <div class="cv-col" data-c="#B84C00" onclick="pickCvCol(this)" style="background:#B84C00" title="Orange"></div>
+          <div class="cv-col" data-c="#9B1B30" onclick="pickCvCol(this)" style="background:#9B1B30" title="Bordeaux"></div>
+          <div class="cv-col" data-c="#2D3748" onclick="pickCvCol(this)" style="background:#2D3748" title="Anthracite"></div>
         </div>
       </div>
-      <div class="pgp-ft" id="cvFt"><span>Studio Éducatif — <b>Bouisson David</b></span><span id="cvAnSco">2025-2026</span></div>
     </div>
-  </div>
-  <div style="margin-top:16px">
-    <div class="cdt" style="font-size:13px">✏️ Personnaliser</div>
-    <div class="fg" style="margin-top:10px">
-      <div class="fi"><label class="fl">Titre principal</label><input class="fn" id="cvTitIn" placeholder="Ex: Fiche Eleve — Cours" oninput="updCover()"/></div>
-      <div class="fi"><label class="fl">Sous-titre</label><input class="fn" id="cvSubIn" placeholder="Ex: Document de travail" oninput="updCover()"/></div>
-      <div class="fi"><label class="fl">Classe</label><input class="fn" id="cvClsIn" placeholder="Ex: 1MELEC" oninput="updCover()"/></div>
-      <div class="fi"><label class="fl">N° Fiche</label><input class="fn" id="cvFicIn" placeholder="Ex: F25" oninput="updCover()"/></div>
-      <div class="fi"><label class="fl">Annee scolaire</label><input class="fn" id="cvAnIn" value="2025 — 2026" oninput="updCover()"/></div>
-      <div class="fi"><label class="fl">Enseignant</label><input class="fn" id="cvPrfIn" value="David Bouisson" oninput="updCover()"/></div>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-      <button class="bt bt-p" onclick="toast('Page de garde enregistree !','ok')">💾 Enregistrer</button>
-      <button class="bt bt-s" onclick="printCover()">🖨 Imprimer / PDF</button>
+    <div style="margin-top:10px">
+      <div class="fi"><label class="fl">Image illustrative (optionnelle)</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="file" accept="image/*" id="cvImgFile" onchange="loadCvImg(this)" style="font-size:11px"/>
+          <button class="bt bt-s bt-sm" onclick="removeCvImg()">Supprimer image</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Galerie toutes les combinaisons -->
+<!-- APERÇU LIVE -->
 <div class="cd">
-  <div class="cdt">📋 Toutes les pages de garde</div>
-  <div class="cds">Cliquez pour previsualiser et personnaliser</div>
-  <div class="pg-grid" id="cvGallery"></div>
+  <div class="cdt">Aperçu</div>
+  <div style="display:flex;justify-content:center;padding:20px;background:var(--bg2);border-radius:12px">
+    <div id="cvLivePreview" style="width:420px;min-height:594px;background:#fff;border-radius:4px;box-shadow:0 4px 20px rgba(0,0,0,.15);overflow:hidden;font-family:Arial,sans-serif;position:relative">
+      <!-- Bandeau supérieur couleur -->
+      <div id="cvBandeau" style="background:#2A5A8C;color:#fff;padding:20px 24px;position:relative">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div id="cvPrevLycee" style="font-size:11px;opacity:.8;font-weight:600;letter-spacing:1px;text-transform:uppercase">Lycée Charles Péguy — Eysines</div>
+            <div id="cvPrevFiliere" style="font-size:10px;opacity:.6;margin-top:2px">Bac Pro MELEC</div>
+          </div>
+          <div id="cvPrevType" style="font-size:9px;background:rgba(255,255,255,.2);padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px">Activité / TP</div>
+        </div>
+      </div>
+      <!-- Image zone -->
+      <div id="cvImgZone" style="height:160px;background:linear-gradient(135deg,#e8e8e8,#d0d0d0);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative">
+        <div id="cvImgPlaceholder" style="text-align:center;color:#999;font-size:11px">
+          <div style="font-size:32px;margin-bottom:6px">📷</div>
+          Ajoutez une image illustrative<br>du thème étudié
+        </div>
+        <img id="cvImgPrev" style="width:100%;height:100%;object-fit:cover;display:none"/>
+      </div>
+      <!-- Titre principal -->
+      <div style="padding:24px">
+        <div id="cvPrevNum" style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Fiche F00</div>
+        <div id="cvPrevTitre" style="font-size:24px;font-weight:800;color:#1a1a1a;line-height:1.2;margin-bottom:4px">Titre du document</div>
+        <div id="cvPrevTheme" style="font-size:14px;color:#666;font-style:italic;margin-bottom:20px">Thème / sous-titre</div>
+        <!-- Type badge -->
+        <div id="cvPrevBadge" style="display:inline-block;padding:6px 16px;border-radius:6px;font-size:11px;font-weight:700;color:#fff;background:#2A5A8C">ACTIVITÉ / TP ÉLÈVE</div>
+      </div>
+      <!-- Infos élève -->
+      <div style="padding:0 24px 20px">
+        <div style="border-top:2px solid #eee;padding-top:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <div style="font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px">Nom</div>
+              <div style="border-bottom:1px solid #ccc;padding:6px 0;font-size:12px;color:#999;min-height:20px">. . . . . . . . . . . . . . . . . . . . . . . .</div>
+            </div>
+            <div>
+              <div style="font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px">Prénom</div>
+              <div style="border-bottom:1px solid #ccc;padding:6px 0;font-size:12px;color:#999;min-height:20px">. . . . . . . . . . . . . . . . . . . . . . . .</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+            <div>
+              <div style="font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px">Classe</div>
+              <div id="cvPrevClasse" style="border-bottom:1px solid #ccc;padding:6px 0;font-size:12px;min-height:20px">. . . . . . . . . .</div>
+            </div>
+            <div>
+              <div style="font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px">Année scolaire</div>
+              <div id="cvPrevAnnee" style="border-bottom:1px solid #ccc;padding:6px 0;font-size:12px;color:#999;min-height:20px">. . . . . / . . . . .</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div id="cvPrevFoot" style="position:absolute;bottom:0;left:0;right:0;padding:10px 24px;font-size:8px;color:#999;display:flex;justify-content:space-between;border-top:1px solid #eee">
+        <span id="cvPrevFootLyc">Lycée Charles Péguy — Eysines</span>
+        <span id="cvPrevFootAn">Bac Pro MELEC</span>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:14px;justify-content:center;flex-wrap:wrap">
+    <button class="bt bt-p" onclick="saveCoverTemplate()">💾 Enregistrer comme modèle</button>
+    <button class="bt bt-s" onclick="printCoverPage()">🖨 Imprimer / PDF</button>
+  </div>
 </div>
+
+<!-- MES MODÈLES DE PAGES DE GARDE -->
+<div class="cd">
+  <div class="cdt">Mes modèles enregistrés</div>
+  <div class="cds">Cliquez pour charger un modèle, ou raccrochez-le à vos documents générés</div>
+  <div id="cvTemplates" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:10px"></div>
+  <div id="cvNoTpl" style="text-align:center;padding:30px;color:var(--tl);font-size:12px">Aucun modèle enregistré. Créez votre première page de garde ci-dessus !</div>
+</div>
+
 </div></div>
 
 <!-- DRIVE -->
@@ -1600,95 +1660,179 @@ async function startGen(){
   }
 
   // 3. Construire le prompt système
-  var systemPrompt='Tu es un expert en ingenierie pedagogique pour l\'Education nationale francaise, specialise dans l\'enseignement professionnel et technique.\n';
-  systemPrompt+='Tu generes des documents pedagogiques COMPLETS, DETAILLES et PROFESSIONNELS.\n';
-  systemPrompt+='\nEXIGENCES DE QUALITE :\n';
-  systemPrompt+='- Chaque activite doit contenir des consignes PRECISES et DETAILLEES (minimum 3-4 phrases)\n';
-  systemPrompt+='- Inclure des schemas, tableaux ou listes techniques quand pertinent\n';
-  systemPrompt+='- Les contenus doivent etre directement utilisables en classe, pas generiques\n';
-  systemPrompt+='- Utiliser le vocabulaire technique exact de la specialite\n';
-  systemPrompt+='- Minimum 5-6 activites par fiche eleve, progressives en difficulte\n';
-  systemPrompt+='- Chaque fiche prof doit detailler au moins 6 phases de deroulement\n';
-  systemPrompt+='- QCM : minimum 5 questions variees (pas uniquement des definitions)\n';
-  systemPrompt+='\n';
+  var systemPrompt='Tu es David Bouisson, enseignant expert en Bac Pro MELEC au lycee Charles Peguy d\'Eysines (Academie de Bordeaux). Tu crees des documents pedagogiques de qualite professionnelle, COMPLETS, DETAILLES et IMMEDIATEMENT UTILISABLES en classe.\n\n';
+
+  systemPrompt+='=== TON STYLE PEDAGOGIQUE (a reproduire fidelement) ===\n';
+  systemPrompt+='1. MISE EN SITUATION REALISTE : Chaque seance part d\'un SCENARIO PROFESSIONNEL CONCRET avec un personnage nomme, une entreprise, un contexte precis et des conditions de travail detaillees. Ex: "M. Dupont, electricien chez SPIE, intervient sur un tableau BT dans une usine. Le sol est humide, il porte des chaussures non isolantes..."\n';
+  systemPrompt+='2. DOCUMENTS LIES : Tu generes TOUJOURS 3 documents complementaires qui se renvoient les uns aux autres :\n';
+  systemPrompt+='   - Fiche seance prof (deroulement minute par minute)\n';
+  systemPrompt+='   - Document eleve cours (theorie + zones a completer)\n';
+  systemPrompt+='   - Activite TP eleve (exercices notes sur 20)\n';
+  systemPrompt+='3. APPORT DE NOTIONS : Le document cours contient la THEORIE COMPLETE (definitions, tableaux de valeurs, formules, schemas, normes). L\'activite TP fait APPLIQUER ces notions.\n';
+  systemPrompt+='4. BAREME SUR 20 : L\'activite TP est TOUJOURS notee sur 20 points, avec le bareme visible pour chaque question.\n';
+  systemPrompt+='5. QUESTIONS VARIEES : identification + justification textuelle + tableaux a completer + calculs (loi d\'Ohm, puissance, section cables...) + exploitation des resultats\n';
+  systemPrompt+='6. ZONES A COMPLETER : Dans le cours, inclure des "A COMPLETER" (calculs, schemas a dessiner, mots a placer) pour que l\'eleve soit ACTIF.\n';
+  systemPrompt+='7. AUTO-EVALUATION : chaque document se termine par un tableau de competences avec 3 niveaux (Acquis / En cours / A revoir).\n\n';
+
+  systemPrompt+='=== STRUCTURE FICHE SEANCE PROF ===\n';
+  systemPrompt+='- En-tete : Niveau (Bac Pro MELEC - classe), Duree sequence (Xh = Y seances x Zh), Seance n/total, Salle, Effectif\n';
+  systemPrompt+='- Competences visees : codes C1, C2, C3... du referentiel avec intitules\n';
+  systemPrompt+='- Objectifs : 4 items "A l\'issue, l\'eleve sera capable de..."\n';
+  systemPrompt+='- Prerequis + Fiches liees (precedente et suivante)\n';
+  systemPrompt+='- DEROULEMENT en 5 phases avec timing precis :\n';
+  systemPrompt+='  Phase 1 - Mise en situation (10 min) : video INRS ou scenario, question ouverte, representations initiales\n';
+  systemPrompt+='  Phase 2 - Apport de connaissances (30 min) : cours structure, completer la fiche eleve, exemples concrets\n';
+  systemPrompt+='  Phase 3 - Activite eleve (30 min) : TP/exercice sur le scenario, circuler aider, differenciation CUA\n';
+  systemPrompt+='  Phase 4 - Correction & synthese (20 min) : correction collective VP, completer "L\'essentiel", points cles\n';
+  systemPrompt+='  Phase 5 - Evaluation formative (30 min) : quiz flash 5 questions, travail a faire pour prochaine seance\n';
+  systemPrompt+='- Reperes normatifs : tableau Norme | Application dans la seance\n';
+  systemPrompt+='- Differenciation CUA 3 groupes :\n';
+  systemPrompt+='  Groupe A Autonome : activite complete + extension (recherche INRS, affiche prevention...)\n';
+  systemPrompt+='  Groupe B Guide : aide lexicale (glossaire 10 termes), travail en binome, amorces de reponse\n';
+  systemPrompt+='  Groupe C Adapte PAP/PPS : police 14pt, interligne 1.5, schemas pre-legendes, duree allongee, tablette autorisee\n';
+  systemPrompt+='- Points de vigilance professeur (erreurs frequentes des eleves, confusions a anticiper)\n\n';
+
+  systemPrompt+='=== STRUCTURE DOCUMENT COURS ELEVE ===\n';
+  systemPrompt+='- En-tete : Lycee, Bac Pro MELEC, Classe, Annee, Titre avec emoji, Nom/Prenom/Classe/Date\n';
+  systemPrompt+='- Partie + Norme de reference\n';
+  systemPrompt+='- Sections numerotees : 1. Presentation (definitions dans encadre), 2-3-4. Contenu technique (tableaux, schemas, comparaisons cote a cote), 5. L\'essentiel a retenir\n';
+  systemPrompt+='- ENCADRES : definitions essentielles dans un cadre, valeurs importantes dans un autre cadre\n';
+  systemPrompt+='- TABLEAUX : pour les donnees techniques (ex: effets du courant = Intensite | Effet | Consequence | Remarque)\n';
+  systemPrompt+='- ZONES A COMPLETER : minimum 2 exercices integres au cours avec "A COMPLETER" (calcul, schema)\n';
+  systemPrompt+='- COMPARAISONS : quand 2 concepts s\'opposent, les presenter cote a cote (ex: contact direct vs indirect)\n';
+  systemPrompt+='- APPLICATION LOI D\'OHM : toujours inclure un exemple resolu + un exercice a completer avec I=U/R ou P=UxI\n';
+  systemPrompt+='- Resume "L\'essentiel" : 5-6 puces resumant les points cles\n';
+  systemPrompt+='- Auto-evaluation : 5-6 competences avec 3 niveaux\n\n';
+
+  systemPrompt+='=== STRUCTURE ACTIVITE TP ELEVE ===\n';
+  systemPrompt+='- En-tete : BAC PRO MELEC, classe, numero fiche, titre\n';
+  systemPrompt+='- Nom/Prenom/Classe/Date/Note: ___/20/Appreciation\n';
+  systemPrompt+='- MISE EN SITUATION : scenario professionnel detaille (personnage nomme, entreprise, contexte, conditions de travail, probleme a resoudre)\n';
+  systemPrompt+='- TRAVAIL A REALISER : 4-5 questions avec bareme total = 20 points\n';
+  systemPrompt+='  Q1 (3-4 pts) : identification/choix + justification textuelle\n';
+  systemPrompt+='  Q2 (5-6 pts) : analyse/tableau a completer (3 lignes minimum)\n';
+  systemPrompt+='  Q3 (5-6 pts) : propositions/mesures avec classification (tableau avec cases a cocher)\n';
+  systemPrompt+='  Q4 (3-4 pts) : CALCUL avec formule pre-remplie "I = U/R = ___ / ___ = ___ A = ___ mA" + exploitation du resultat\n';
+  systemPrompt+='  Q5 optionnelle (2 pts) : bonus/ouverture pour les plus rapides\n';
+  systemPrompt+='- AUTO-EVALUATION : 5 competences liees aux questions, avec 3 niveaux (Acquis/En cours/A revoir)\n\n';
+
   systemPrompt+='NIVEAU : '+niveau+'\n';
   systemPrompt+='REFERENTIELS ET NORMES DISPONIBLES :\n'+refs.map(function(r){return '- '+r}).join('\n')+'\n\n';
   systemPrompt+='OBLIGATIONS INSTITUTIONNELLES :\n';
-  systemPrompt+='- Conformite CUA (Conception Universelle des Apprentissages)\n';
-  systemPrompt+='- Differenciation pedagogique (3 niveaux : guide, standard, expert)\n';
-  systemPrompt+='- Evaluation par competences\n';
+  systemPrompt+='- Conformite CUA (Conception Universelle des Apprentissages) - OBLIGATOIRE\n';
+  systemPrompt+='- Differenciation pedagogique 3 groupes (A autonome / B guide / C adapte PAP-PPS)\n';
+  systemPrompt+='- Evaluation par competences du referentiel\n';
   systemPrompt+='- Inclusion et accessibilite\n';
   if(curUser&&curUser.spec){
     systemPrompt+='SPECIALITE ENSEIGNANT : '+curUser.spec+'\n';
     if(curUser.spec==='MELEC'||curUser.matieres&&(curUser.matieres.indexOf('Electrotechnique')>=0||curUser.matieres.indexOf('Genie electrique')>=0)){
-      systemPrompt+='\nSOURCES ET REFERENTIELS MELEC A UTILISER :\n';
-      systemPrompt+='- Referentiel Bac Pro MELEC (Metiers de l\'Electricite et de ses Environnements Connectes)\n';
-      systemPrompt+='- NFC 15-100 (installations electriques basse tension)\n';
-      systemPrompt+='- NFC 18-510 (operations sur les ouvrages et installations electriques, habilitations)\n';
-      systemPrompt+='- NFC 13-100 (postes de livraison HTA/BT)\n';
-      systemPrompt+='- NFC 14-100 (installations de branchement)\n';
-      systemPrompt+='- UTE C 15-520 (canalisations), UTE C 15-559 (photovoltaique)\n';
-      systemPrompt+='\nFABRICANTS ET EQUIPEMENTS DE REFERENCE :\n';
-      systemPrompt+='- Schneider Electric : appareillage modulaire (Acti9 iC60, iID, iC40), tableaux Prisma, variateurs Altivar, automates Modicon M221/M241, systeme KNX Wiser, coffrets Kaedra, prises Unica, Odace\n';
-      systemPrompt+='- Legrand : appareillage modulaire (DNX3, DX3, DRX), tableaux Drivia/XL3, chemin de cables Cablofil, prises Mosaic, Celiane, Dooxie, systeme connecte Netatmo\n';
-      systemPrompt+='- Hager : appareillage modulaire (MFN/MFS/MCN), tableaux Gamma, systeme domotique TXA/TXM (KNX)\n';
-      systemPrompt+='- ABB : appareillage S200/F200, variateurs ACS, automates AC500\n';
-      systemPrompt+='- Siemens : automates LOGO!, S7-1200, variateurs Sinamics, appareillage 5SY\n';
-      systemPrompt+='- Phoenix Contact : bornes de raccordement, alimentations QUINT, parafoudres\n';
-      systemPrompt+='- Wago : bornes de connexion 221/222/2273, systeme domotique\n';
-      systemPrompt+='- Chauvin Arnoux / Fluke : appareils de mesure (multimetres, pinces amperemetriques, tellurometre, controleur d\'installation)\n';
-      systemPrompt+='\nRESSOURCES PEDAGOGIQUES EN LIGNE :\n';
-      systemPrompt+='- Eduscol : fiches ressources Bac Pro MELEC, reperes de formation\n';
-      systemPrompt+='- Sites academiques : ac-bordeaux.fr, ac-toulouse.fr, ac-lyon.fr (sections STI/electrotechnique)\n';
-      systemPrompt+='- Schneider Electric - Formation : se.com/fr (schemas, guides techniques, catalogues)\n';
-      systemPrompt+='- Legrand - Espace pro : legrand.fr (guides choix, schemas, normes)\n';
-      systemPrompt+='\nUTILISE ces references concretes dans les documents : cite les normes exactes, les references produit, les schemas de cablage reels. Le document doit etre TECHNIQUE et PROFESSIONNEL, pas generique.\n';
+      systemPrompt+='\n=== REFERENTIEL MELEC ===\n';
+      systemPrompt+='TACHES PROFESSIONNELLES : T1 Preparation | T2 Realisation (implanter, poser, cabler) | T3 Mise en service (verifications, reglages, essais) | T4 Maintenance (preventive, depannage) | T5 Communication (dossier technique, conseil client)\n';
+      systemPrompt+='\nCOMPETENCES DU REFERENTIEL BAC PRO MELEC (choisis automatiquement les competences pertinentes selon le sujet de la seance) :\n';
+      systemPrompt+='C1 - Analyser les conditions de l\'operation et son contexte\n';
+      systemPrompt+='C2 - Organiser l\'operation dans son contexte\n';
+      systemPrompt+='C3 - Definir une installation a l\'aide de solutions preconisees\n';
+      systemPrompt+='C4 - Realiser une installation de maniere eco-responsable\n';
+      systemPrompt+='C5 - Controler les grandeurs caracteristiques de l\'installation\n';
+      systemPrompt+='C6 - Regler, parametrer les materiels de l\'installation\n';
+      systemPrompt+='C7 - Valider le fonctionnement de l\'installation\n';
+      systemPrompt+='C8 - Diagnostiquer un dysfonctionnement\n';
+      systemPrompt+='C9 - Remplacer un materiel electrique\n';
+      systemPrompt+='C10 - Exploiter les outils numeriques dans le contexte professionnel\n';
+      systemPrompt+='C11 - Completer les documents lies aux operations\n';
+      systemPrompt+='C12 - Communiquer entre professionnels sur l\'operation\n';
+      systemPrompt+='C13 - Communiquer avec le client/usager sur l\'operation\n';
+      systemPrompt+='C14 - Respecter les regles d\'habilitation electrique (NFC 18-510)\n';
+      systemPrompt+='C15 - Identifier les risques lies a l\'activite professionnelle\n';
+      systemPrompt+='C16 - Appliquer les mesures de prevention adaptees\n';
+      systemPrompt+='\nSAVOIRS ASSOCIES (a citer dans les fiches) :\n';
+      systemPrompt+='S1 - Culture professionnelle (contexte economique, enjeux energetiques, transition numerique)\n';
+      systemPrompt+='S2 - Les installations electriques (architectures, schemas, distribution BT/HTA)\n';
+      systemPrompt+='S3 - Les equipements electriques (appareillage, protection, commande, communication)\n';
+      systemPrompt+='S4 - Les installations communicantes (VDI, KNX, domotique, supervision)\n';
+      systemPrompt+='S5 - La securite des personnes et des biens (habilitation, EPI, consignation, VAT)\n';
+      systemPrompt+='S6 - Les outils et methodes (metrologie, schemas, documents techniques)\n';
+      systemPrompt+='\nINSTRUCTION : Pour chaque fiche generee, CHOISIS TOI-MEME les 3-4 competences (C1 a C16) et 2-3 savoirs (S1 a S6) les plus pertinents selon le sujet. Ne demande PAS a l\'utilisateur de les choisir. Indique les codes ET les intitules dans la fiche prof.\n';
+      systemPrompt+='NORMES : NFC 15-100 (BT habitat/tertiaire) | NFC 18-510 (habilitations B0/B1V/B2V/BR/BC/BE) | NFC 13-100 (HTA) | NFC 14-100 (branchement) | IEC 60479 (effets courant corps) | UTE C 15-520 (canalisations) | UTE C 15-559 (PV)\n';
+      systemPrompt+='FABRICANTS : Schneider (Acti9 iC60N, iID 30mA, Pragma, Altivar, Modicon M221, Wiser KNX) | Legrand (DNX3, DX3, Drivia, Mosaic, Celiane, Netatmo) | Hager (MFN/MFS, Gamma, Kallysta) | Chauvin Arnoux (CA 5273, MX670) | Fluke (117, i400s) | Wago (221/222/2273)\n';
+      systemPrompt+='RESSOURCES : Eduscol STI | INRS.fr | sites academiques (ac-bordeaux, ac-toulouse) | se.com/fr (Schneider) | legrand.fr | electrotoile.eu\n';
+      systemPrompt+='SITUATIONS PRO : habitat (installation T3, mise aux normes) | tertiaire (cabinet medical, bureau) | industriel (armoire commande, TGBT) | domotique (KNX Wiser, Netatmo) | PV (autoconsommation 3kWc) | IRVE (borne VE) | maintenance (depannage eclairage)\n\n';
+      systemPrompt+='=== STRUCTURE TP PRATIQUE (pour les TP de realisation/cablage) ===\n';
+      systemPrompt+='Quand le type est TP pratique ou realisation, utilise cette structure EXACTE :\n';
+      systemPrompt+='\n--- PAGE 1 : EN-TETE + GRILLE COMPETENCES ---\n';
+      systemPrompt+='- Tableau ACTIVITES / TACHES PROFESSIONNELLES avec les taches T1-1, T2-1, T2-3, T2-6, T5-2 pertinentes\n';
+      systemPrompt+='- Secteur (habitat/industrie/tertiaire) + Niveau (decouverte/intermediaire/certificative)\n';
+      systemPrompt+='- Image ou description du systeme etudie\n';
+      systemPrompt+='\n--- PAGE 2 : FICHE EVALUATION ---\n';
+      systemPrompt+='- Nom/Prenom/Date\n';
+      systemPrompt+='- TABLEAU DE COMPETENCES avec colonnes : Competence visee | A | NE | Barres progression (4 niveaux) | Question\n';
+      systemPrompt+='- Competences C1 a C13 pertinentes avec sous-criteres et numeros de questions associes\n';
+      systemPrompt+='\n--- PAGE 3 : CONTEXTE + RESSOURCES ---\n';
+      systemPrompt+='- Description du contexte : scenario professionnel CONCRET (ex: systeme aeration maison seniors vetuste a changer)\n';
+      systemPrompt+='- Problematique professionnelle : question technique precisee\n';
+      systemPrompt+='- Ressources : dossier technique, dossier securite, materiel, schemas\n';
+      systemPrompt+='- On vous demande : consignes comportementales (respecter consignes, appeler prof, poste propre)\n';
+      systemPrompt+='- Conseils : prendre connaissance du sujet, rester concentre\n';
+      systemPrompt+='\n--- PARTIE 1 : ANALYSE DES RISQUES ---\n';
+      systemPrompt+='- Activite 1 : Preparation des operations\n';
+      systemPrompt+='- Questions sur securite : situations accidents, definitions electrisation/electrocution, effets courant, EPI a cocher (images), identification appareils sur platine\n';
+      systemPrompt+='- Tableau photos/designation/repere a completer\n';
+      systemPrompt+='\n--- PARTIE 2 : REALISATION ---\n';
+      systemPrompt+='- Activite 2 : Realisation de l\'installation\n';
+      systemPrompt+='- Etapes de cablage avec verification prof apres CHAQUE etape\n';
+      systemPrompt+='- Cases a cocher : conforme / non conforme\n';
+      systemPrompt+='- Consignes techniques precises : couleurs fils, sections (1.5mm2), embouts, goulottes, caches\n';
+      systemPrompt+='- Liaison equipotentielle si necessaire\n';
+      systemPrompt+='\n--- PARTIE 3 : RANGEMENT ---\n';
+      systemPrompt+='- Rangement et nettoyage du chantier\n';
+      systemPrompt+='- Verification prof : conforme/non conforme\n';
+      systemPrompt+='\nIMPORTANT POUR LES TP PRATIQUES :\n';
+      systemPrompt+='- CHAQUE etape de realisation doit avoir "Faire verifier par votre professeur ! □ conforme □ non conforme"\n';
+      systemPrompt+='- Utiliser les VRAIS reperes des appareils : Q1 (sectionneur), KM1 (contacteur), F1 (relais thermique), T1 (transformateur), S1/S2 (boutons), H1/H2 (voyants), M1 (moteur)\n';
+      systemPrompt+='- Indiquer les bornes de raccordement : 1/L1, 3/L2, 5/L3, 2/T1, 4/T2, 6/T3, A1/A2, 95/96, 97/98, 13/14\n';
+      systemPrompt+='- Etapes de raccordement dans l\'ordre : bornier X1 -> sectionneur Q1 -> contacteur KM1 -> relais thermique F1 -> bornier X1 (moteur)\n';
+      systemPrompt+='- Distinguer TOUJOURS circuit puissance (3x400V, noir 1.5mm2) et circuit commande (24V TBT, rouge)\n\n';
     }
   }
   if(curUser&&curUser.matieres&&curUser.matieres.length)systemPrompt+='MATIERES : '+curUser.matieres.join(', ')+'\n';
   if(curUser&&curUser.etab)systemPrompt+='ETABLISSEMENT : '+curUser.etab+'\n';
-  if(S.type==='tp')systemPrompt+='- Securite et sante au travail (EPI, risques, habilitation)\n';
+  if(S.type==='tp')systemPrompt+='SECURITE TP : TOUJOURS inclure analyse des risques, EPI (gants isolants, lunettes, VAT), consignes securite, verification absence de tension.\n';
   systemPrompt+='\nREPONDS EN JSON VALIDE selon le schema suivant.\n';
 
   // 4. Construire le schéma JSON selon les docs choisis
   var schema='{';
   if(docsChoisis.indexOf('fiche_eleve')>=0){
-    schema+='"fiche_eleve":{"en_tete":{"lycee":"str","enseignant":"str","classe":"str","date":"str","numero":"str","titre":"str","duree":"str","competences":["str"]},"objectifs":["str"],"introduction":"str (paragraphe de contexte engageant)","activites":[{"numero":1,"titre":"str","type":"decouverte|application|approfondissement","consigne":"str","materiel":"str si besoin","duree":"str"}],"synthese":"str (ce que l eleve doit retenir)","qcm":[{"question":"str","choix":["str"],"reponse":"str"}],"auto_evaluation":{"competences":[{"code":"str","intitule":"str","niveaux":["Non acquis","En cours","Acquis","Expert"]}]}},';
+    schema+='"fiche_eleve":{"en_tete":{"lycee":"str","enseignant":"str","classe":"str","date":"str","numero":"str (ex: F24)","titre":"str","duree":"str","competences":["str - codes C1-C16 + intitule"]},"objectifs":["str - minimum 4 objectifs A l\'issue l\'eleve sera capable de..."],"introduction":"MISE EN SITUATION detaillee (minimum 8 phrases) : scenario professionnel REALISTE avec un personnage nomme (ex: M. Martin, electricien chez SPIE), une entreprise, un lieu precis, des conditions de travail detaillees (humidite, EPI, materiel), un probleme technique a resoudre. Doit donner envie a l\'eleve de lire la suite.","activites":[{"numero":1,"titre":"str - titre ENGAGEANT (pas Activite 1 mais Defi 1 : Identifier les protections)","type":"decouverte|application|approfondissement","consigne":"str DETAILLE minimum 5 phrases : etapes numerotees precises, materiel avec references fabricant (ex: disjoncteur Schneider iC60N C16), formule ou norme a appliquer, criteres de reussite","materiel":"str avec references precises fabricant","duree":"str - TOUJOURS indiquer X min travail + Y min correction (ex: 15 min travail + 5 min correction)"}],"synthese":"str detaille - L\'ESSENTIEL A RETENIR : 5-6 points cles que l\'eleve doit memoriser, avec les valeurs et formules importantes","qcm":[{"question":"str - questions TECHNIQUES variees (pas que des definitions) : calcul, schema, norme, securite, identification materiel","choix":["str - 4 choix dont 1 seul correct, les distracteurs doivent etre plausibles"],"reponse":"str"}],"auto_evaluation":{"competences":[{"code":"str (C1-C16)","intitule":"str - competence du referentiel","niveaux":["Non acquis","En cours","Acquis","Expert"]}]}},"bareme":"Activite notee sur 20 points : indiquer le bareme dans chaque consigne d\'activite (ex: Question 1 - 4 points)",';
   }
   if(docsChoisis.indexOf('fiche_prof')>=0){
-    schema+='"fiche_prof":{"deroulement":[{"phase":"str","duree":"str","activite_prof":"str","activite_eleve":"str","supports":"str","differenciation":"str"}],"competences_visees":[{"code":"str","intitule":"str","criteres_evaluation":"str"}],"cua":{"engagement":"str (comment capter l attention)","representation":"str (comment presenter l info)","action":"str (comment l eleve agit)"},"prolongements":"str","reponses_attendues":"str (pour les activites)"},';
+    schema+='"fiche_prof":{"deroulement":[{"phase":"str (5 PHASES OBLIGATOIRES : 1-Mise en situation / 2-Apport de connaissances / 3-Activite eleve / 4-Correction et synthese / 5-Evaluation formative)","duree":"str avec timing precis (ex: 0-10 min)","activite_prof":"str DETAILLE : ce que fait le prof (questions posees mot pour mot, consignes precises, ce qu\'il ecrit au tableau, video a diffuser avec URL si possible)","activite_eleve":"str : ce que fait l\'eleve a chaque instant","supports":"str (video INRS, fiche eleve, VP, ENT...)","differenciation":"str - CUA obligatoire : Groupe A autonome (extension) / Groupe B guide (aide lexicale, binome) / Groupe C adapte PAP-PPS (police 14pt, schemas pre-legendes, duree allongee)"}],"competences_visees":[{"code":"str (C1-C16 du referentiel MELEC)","intitule":"str - intitule officiel du referentiel","criteres_evaluation":"str - criteres observables et mesurables"}],"cua":{"engagement":"str - comment capter l\'attention (video choc, scenario, defi)","representation":"str - comment presenter l\'info (tableaux, schemas, comparaisons)","action":"str - comment l\'eleve agit (manipule, calcule, dessine, debat)"},"prolongements":"str - liens avec les fiches precedentes et suivantes, travail a faire","reponses_attendues":"str TRES DETAILLE : toutes les reponses attendues pour CHAQUE question de l\'activite TP, avec les calculs complets, les justifications, les schemas corriges. Le prof doit pouvoir corriger sans rien chercher.","reperes_normatifs":[{"norme":"str (ex: NF C18-510)","application":"str - comment cette norme s\'applique dans CETTE seance"}],"points_vigilance":["str - erreurs frequentes des eleves, confusions a anticiper, pieges a eviter"]},';
   }
   if(docsChoisis.indexOf('fiche_prepa')>=0){
-    schema+='"fiche_prepa":{"timing_detaille":[{"heure":"str","duree":"str","action":"str"}],"materiel_necessaire":["str"],"prerequis":["str"],"differenciation":{"eleves_difficulte":"str","eleves_avances":"str"},"points_vigilance":["str"],"plan_b":"str (si probleme technique ou temps)"},';
+    schema+='"fiche_prepa":{"timing_detaille":[{"heure":"str","duree":"str","action":"str detaille"}],"materiel_necessaire":["str avec references precises : marque, modele, reference (ex: Multimetre Chauvin Arnoux CA 5273, Disjoncteur Schneider iC60N C16 ref A9F77616)"],"prerequis":["str"],"differenciation":{"eleves_difficulte":"str - aides concretes (glossaire, amorces, binome, fiche simplifiee)","eleves_avances":"str - extensions concretes (recherche INRS, cas supplementaire, affiche)"},"points_vigilance":["str"],"plan_b":"str - si le temps manque, quelles activites prioriser"},"document_cours_eleve":{"sections":[{"numero":"int","titre":"str","contenu":"str TRES DETAILLE : definitions dans encadres, tableaux de valeurs techniques (ex: effets du courant = Intensite|Effet|Consequence|Remarque), formules avec exemple resolu ET exercice A COMPLETER (ex: I=U/R= .../...= ... A), comparaisons cote a cote (ex: contact direct vs indirect avec exemples et protections), schemas a completer par l\'eleve"}],"essentiel_a_retenir":["str - 5-6 points cles"],"auto_evaluation":[{"competence":"str","niveaux":["Oui","En cours","Pas encore"]}]},';
   }
-  if(docsChoisis.indexOf('activite_tp')>=0||S.type==='tp'){
-    schema+='"activite_tp":{"situation_professionnelle":"str (mise en contexte pro realiste)","problematique":"str","travail_demande":[{"etape":1,"tache":"str","criteres_reussite":"str","temps":"str"}],"materiel":["str"],"securite":{"epi_obligatoires":["str"],"risques":["str"],"consignes":["str"]},"evaluation_competences":[{"code":"str","indicateur":"str","acquis":"bool"}]},';
-  }
-  if(S.type==='tp'){
-    schema+='"protocole_tp":{"consignes_securite":"str","equipements_protection":["str"],"procedure":[{"etape":1,"action":"str","verification":"str"}]},';
-    schema+='"dossier_sst":{"risques_identifies":[{"risque":"str","gravite":"faible|moyen|eleve","prevention":"str"}],"epi":["str"],"conduite_urgence":"str","habilitation_requise":"str"},';
-  }
-  schema=schema.replace(/,$/,'');
   schema+='}';
 
   systemPrompt+='\nSCHEMA JSON ATTENDU :\n'+schema+'\n';
   systemPrompt+='\nIMPORTANT : Genere du contenu RICHE, DETAILLE et PEDAGOGIQUEMENT SOLIDE. Pas de placeholder ni de texte generique. Adapte le vocabulaire et la complexite au niveau '+niveau+'.';
 
   // 5. Construire le message utilisateur
-  var userMsg='Genere des documents COMPLETS et DETAILLES pour :\n';
+  var userMsg='Genere les 3 documents (fiche seance prof + document cours eleve + activite TP eleve) pour :\n';
   userMsg+='- Titre : '+titre+'\n';
-  userMsg+='- Type : '+typeCours+' ('+duree+')\n';
+  userMsg+='- Type : '+typeCours+' (duree : '+duree+')\n';
   userMsg+='- Classe : '+classe+'\n';
-  userMsg+='- N° fiche : '+numFiche+'\n';
-  if(competences)userMsg+='- Competences visees : '+competences+'\n';
+  userMsg+='- N fiche : '+numFiche+'\n';
+  if(competences)userMsg+='- Competences suggerees par l\'enseignant (tu peux en ajouter d\'autres pertinentes) : '+competences+'\n';
+  else userMsg+='- Competences : CHOISIS automatiquement les 3-4 competences C1-C16 et 2-3 savoirs S1-S6 les plus pertinents pour ce sujet.\n';
   if(objectifs)userMsg+='- Objectifs pedagogiques : '+objectifs+'\n';
-  if(contexte)userMsg+='- Contexte et situation professionnelle : '+contexte+'\n';
-  userMsg+='\nINSTRUCTIONS IMPORTANTES :\n';
-  userMsg+='- Developpe CHAQUE section en detail (pas de reponses courtes ou generiques)\n';
-  userMsg+='- Inclus des references precises aux normes, equipements et fabricants\n';
-  userMsg+='- Les activites doivent etre progressives : decouverte > application > approfondissement\n';
-  userMsg+='- Ajoute des consignes de securite specifiques quand pertinent\n';
-  userMsg+='- Le QCM doit tester la comprehension technique, pas juste les definitions\n';
+  if(contexte)userMsg+='- Situation professionnelle : '+contexte+'\n';
+  userMsg+='\nRAPPEL DES EXIGENCES QUALITE :\n';
+  userMsg+='- Mise en situation : scenario REALISTE avec personnage nomme, entreprise, contexte detaille (6 phrases min)\n';
+  userMsg+='- Activite TP : notee sur 20 points, 4-5 questions variees (identification, tableaux, calculs, exploitation)\n';
+  userMsg+='- Document cours : theorie complete + 2 zones "A completer" + tableaux techniques + comparaisons cote a cote\n';
+  userMsg+='- Fiche prof : deroulement 5 phases (mise en situation 10min + apport 30min + activite 30min + correction 20min + evaluation 30min) = '+duree+'\n';
+  userMsg+='- Differenciation CUA obligatoire : Groupe A autonome / Groupe B guide / Groupe C adapte PAP-PPS\n';
+  userMsg+='- Auto-evaluation en fin de chaque document (competences Acquis/En cours/A revoir)\n';
+  userMsg+='- References normes et fabricants precises (NFC, Schneider, Legrand...)\n';
 
   // 6. Appel API Claude réel
   st.textContent='Generation IA en cours...';si.textContent='2/3';
@@ -1749,6 +1893,12 @@ function showR(){
     var meta=docMap[key]||{i:'📄',t:key};
     tabs.push('<button class="rt-tab'+(tabs.length===0?' act':'')+'" onclick="showResTab(this,\'rp_'+key+'\')">'+meta.i+' '+meta.t+'</button>');
     panels.push('<div class="rt-panel" id="rp_'+key+'" style="'+(panels.length===0?'':'display:none')+'">'+renderDocContent(key,gc[key],fn)+'</div>');
+  }
+  // Auto-generate cover page if checkbox is checked
+  if(docsChoisis.indexOf('page_garde')>=0){
+    var cvHtml=generateAutoCover(fn,titre,classe,numFiche,typeCours,competences);
+    tabs.push('<button class="rt-tab" onclick="showResTab(this,\'rp_page_garde\')">📄 Page de garde</button>');
+    panels.push('<div class="rt-panel" id="rp_page_garde" style="display:none">'+cvHtml+'</div>');
   });
   var html='<div class="rt-tabs">'+tabs.join('')+'</div><div class="rt-panels">'+panels.join('')+'</div>';
   html+='<div style="display:flex;gap:6px;margin-top:14px;flex-wrap:wrap;justify-content:center">';
@@ -1780,10 +1930,15 @@ function renderDocContent(key,data,fn){
     if(data.deroulement&&data.deroulement.length){h+='<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--p);margin-bottom:6px">📋 Deroulement</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:10px"><tr style="background:var(--p);color:#fff"><th style="padding:6px 8px;text-align:left">Phase</th><th style="padding:6px 8px">Durée</th><th style="padding:6px 8px;text-align:left">Prof</th><th style="padding:6px 8px;text-align:left">Eleve</th><th style="padding:6px 8px;text-align:left">Diff.</th></tr>';data.deroulement.forEach(function(d,i){h+='<tr style="background:'+(i%2?'rgba(42,90,140,.03)':'#fff')+'"><td style="padding:6px 8px;font-weight:600">'+d.phase+'</td><td style="padding:6px 8px;text-align:center">'+d.duree+'</td><td style="padding:6px 8px">'+d.activite_prof+'</td><td style="padding:6px 8px">'+d.activite_eleve+'</td><td style="padding:6px 8px;font-size:9px;color:var(--a)">'+(d.differenciation||'')+'</td></tr>'});h+='</table></div></div>'}
     if(data.cua){h+='<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:#7C3AED;margin-bottom:6px">♿ CUA</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">';['engagement','representation','action'].forEach(function(k){if(data.cua[k])h+='<div style="padding:10px;background:rgba(124,58,237,.04);border-radius:8px;font-size:10px;line-height:1.4"><div style="font-weight:700;color:#7C3AED;margin-bottom:3px">'+k.charAt(0).toUpperCase()+k.slice(1)+'</div>'+data.cua[k]+'</div>'});h+='</div></div>'}
     if(data.competences_visees&&data.competences_visees.length){h+='<div><div style="font-size:11px;font-weight:700;color:var(--ok);margin-bottom:6px">🎯 Competences</div>';data.competences_visees.forEach(function(c){h+='<div style="padding:6px 10px;border-left:3px solid var(--ok);margin-bottom:4px;font-size:10px"><b>'+c.code+'</b> — '+c.intitule+'<br><span style="color:var(--tl)">'+c.criteres_evaluation+'</span></div>'});h+='</div>'}
+    if(data.reperes_normatifs&&data.reperes_normatifs.length){h+='<div style="margin:10px 0"><div style="font-size:11px;font-weight:700;color:var(--p);margin-bottom:6px">📖 Repères normatifs</div><table style="width:100%;border-collapse:collapse;font-size:10px"><tr style="background:var(--p);color:#fff"><th style="padding:5px 8px;text-align:left">Norme</th><th style="padding:5px 8px;text-align:left">Application</th></tr>';data.reperes_normatifs.forEach(function(n,i){h+='<tr style="background:'+(i%2?'rgba(42,90,140,.03)':'#fff')+'"><td style="padding:5px 8px;font-weight:600">'+n.norme+'</td><td style="padding:5px 8px">'+n.application+'</td></tr>'});h+='</table></div>'}
+    if(data.points_vigilance&&data.points_vigilance.length){h+='<div style="margin:10px 0;padding:10px;background:rgba(232,114,42,.06);border-radius:8px;border-left:3px solid var(--a)"><div style="font-size:11px;font-weight:700;color:var(--a);margin-bottom:4px">⚠ Points de vigilance</div>';data.points_vigilance.forEach(function(p){h+='<div style="font-size:10px;padding:2px 0;color:var(--t)">• '+p+'</div>'});h+='</div>'}
+    if(data.reponses_attendues){h+='<div style="margin:10px 0;padding:10px;background:rgba(45,138,86,.06);border-radius:8px;border-left:3px solid var(--ok)"><div style="font-size:11px;font-weight:700;color:var(--ok);margin-bottom:4px">✅ Réponses attendues</div><div style="font-size:10px;line-height:1.5;color:var(--t)">'+data.reponses_attendues+'</div></div>'}
+    if(data.prolongements){h+='<div style="margin:10px 0;padding:8px;background:rgba(42,90,140,.04);border-radius:8px;font-size:10px;color:var(--t)"><b>📌 Prolongements :</b> '+data.prolongements+'</div>'}
   }else if(key==='fiche_prepa'){
     if(data.timing_detaille&&data.timing_detaille.length){h+='<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--p);margin-bottom:6px">⏱ Timing</div>';data.timing_detaille.forEach(function(t){h+='<div style="display:flex;gap:8px;padding:4px 0;font-size:10px;border-bottom:1px solid rgba(0,0,0,.04)"><span style="font-weight:700;color:var(--a);min-width:50px">'+t.heure+'</span><span style="color:var(--tl);min-width:40px">'+t.duree+'</span><span>'+t.action+'</span></div>'});h+='</div>'}
     if(data.materiel_necessaire&&data.materiel_necessaire.length){h+='<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--a);margin-bottom:4px">🧰 Materiel</div><div style="display:flex;flex-wrap:wrap;gap:4px">';data.materiel_necessaire.forEach(function(m){h+='<span style="padding:3px 8px;border-radius:4px;font-size:10px;background:rgba(232,114,42,.06);color:var(--a)">'+m+'</span>'});h+='</div></div>'}
     if(data.differenciation){h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="padding:10px;border-radius:8px;background:rgba(42,90,140,.04);font-size:10px;line-height:1.5"><div style="font-weight:700;color:var(--p);margin-bottom:3px">🔵 En difficulte</div>'+(data.differenciation.eleves_difficulte||'')+'</div><div style="padding:10px;border-radius:8px;background:rgba(232,114,42,.04);font-size:10px;line-height:1.5"><div style="font-weight:700;color:var(--a);margin-bottom:3px">🟠 Avances</div>'+(data.differenciation.eleves_avances||'')+'</div></div>'}
+  if(data.document_cours_eleve){var dce=data.document_cours_eleve;h+='<div style="margin-top:12px;padding:12px;background:rgba(42,90,140,.03);border-radius:10px;border:1px solid rgba(42,90,140,.15)"><div style="font-size:12px;font-weight:700;color:var(--p);margin-bottom:8px">📘 Document cours élève</div>';if(dce.sections&&dce.sections.length){dce.sections.forEach(function(s){h+='<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--p);padding:4px 0;border-bottom:1px solid rgba(42,90,140,.15)">'+s.numero+'. '+s.titre+'</div><div style="font-size:10px;line-height:1.5;padding:6px 0;color:var(--t)">'+(s.contenu||'')+'</div></div>'})}if(dce.essentiel_a_retenir&&dce.essentiel_a_retenir.length){h+='<div style="padding:10px;background:rgba(45,138,86,.06);border-radius:8px;margin-top:6px"><div style="font-size:11px;font-weight:700;color:var(--ok);margin-bottom:4px">📗 L'essentiel à retenir</div>';dce.essentiel_a_retenir.forEach(function(e){h+='<div style="font-size:10px;padding:2px 0">• '+e+'</div>'});h+='</div>'}if(dce.auto_evaluation&&dce.auto_evaluation.length){h+='<div style="margin-top:6px"><div style="font-size:10px;font-weight:700;color:#7C3AED;margin-bottom:3px">🎯 Auto-évaluation</div>';dce.auto_evaluation.forEach(function(a){h+='<div style="font-size:10px;padding:2px 0">☐ '+a.competence+'</div>'});h+='</div>'}h+='</div>'}
   }else if(key==='activite_tp'){
     if(data.situation_professionnelle)h+='<div style="padding:12px;background:rgba(232,114,42,.04);border-radius:8px;border-left:3px solid var(--a);font-size:11px;line-height:1.6;margin-bottom:10px"><b>🏭 Situation pro :</b> '+data.situation_professionnelle+'</div>';
     if(data.securite){h+='<div style="padding:10px;background:rgba(197,48,48,.04);border-radius:8px;border:1px solid rgba(197,48,48,.15);margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--er);margin-bottom:6px">⚠️ Securite</div>';if(data.securite.epi_obligatoires)h+='<div style="display:flex;flex-wrap:wrap;gap:4px">'+data.securite.epi_obligatoires.map(function(e){return '<span style="padding:3px 8px;border-radius:4px;font-size:10px;background:rgba(197,48,48,.08);color:var(--er)">🛡 '+e+'</span>'}).join('')+'</div>';h+='</div>'}
@@ -2419,6 +2574,230 @@ var demoMode=false;
 function enterDemo(){demoMode=true;document.getElementById('landingView').style.display='none';document.getElementById('dashView').style.display='block';document.body.classList.remove('no-auth');toast('Mode demo — Inscrivez-vous pour generer !','ok')}
 async function ensureCreatorAccount(){var us=await loadUsers();var em='david.bouisson'+String.fromCharCode(64)+'ac-bordeaux.fr';var cr=us.find(function(u){return u.email===em});if(!cr){us.push({first:'David',last:'Bouisson',email:em,role:'creator',date:new Date().toLocaleDateString('fr-FR'),cycle:'lycee_pro',niveaux:['seconde','premiere','terminale'],domaine:'pro',matieres:['Electrotechnique','Genie electrique'],spec:'MELEC',etab:'Lycee Peguy Eysines',academie:'ac-bordeaux.fr',genCount:0,onboarded:true});await saveUsers(us);console.log('Creator OK')}}
 (async function init(){await loadSession();if(curUser)applyLogin();loadBib().then(function(){renderBib2();buildHome()});ensureCreatorAccount();if(!curUser)document.body.classList.add('no-auth')})()
+
+
+
+// === PAGES DE GARDE ===
+var cvColor='#2A5A8C';
+var cvImgData=null;
+var cvTemplatesArr=[];
+
+function pickCvCol(el){
+  document.querySelectorAll('.cv-col').forEach(function(c){c.classList.remove('sel')});
+  el.classList.add('sel');
+  cvColor=el.getAttribute('data-c');
+  refreshCover();
+}
+
+function loadCvImg(inp){
+  if(inp.files&&inp.files[0]){
+    var r=new FileReader();
+    r.onload=function(e){
+      cvImgData=e.target.result;
+      document.getElementById('cvImgPrev').src=cvImgData;
+      document.getElementById('cvImgPrev').style.display='block';
+      document.getElementById('cvImgPlaceholder').style.display='none';
+    };
+    r.readAsDataURL(inp.files[0]);
+  }
+}
+
+function removeCvImg(){
+  cvImgData=null;
+  document.getElementById('cvImgPrev').style.display='none';
+  document.getElementById('cvImgPlaceholder').style.display='block';
+  document.getElementById('cvImgFile').value='';
+}
+
+function refreshCover(){
+  var lycee=document.getElementById('cvLycee').value||'Lycée Charles Péguy';
+  var filiere=document.getElementById('cvFiliere').value||'Bac Pro MELEC';
+  var titre=document.getElementById('cvTitrePG').value||'Titre du document';
+  var type=document.getElementById('cvTypePG');
+  var typeText=type.options[type.selectedIndex].text;
+  var num=document.getElementById('cvNumPG').value||'F00';
+  var classe=document.getElementById('cvClassePG').value||'';
+  var annee=document.getElementById('cvAnneePG').value||'';
+  var theme=document.getElementById('cvThemePG').value||'';
+  var prof=document.getElementById('cvProfPG').value||'';
+
+  document.getElementById('cvBandeau').style.background=cvColor;
+  document.getElementById('cvPrevLycee').textContent=lycee;
+  document.getElementById('cvPrevFiliere').textContent=filiere;
+  document.getElementById('cvPrevType').textContent=typeText;
+  document.getElementById('cvPrevNum').textContent='Fiche '+num;
+  document.getElementById('cvPrevTitre').textContent=titre;
+  document.getElementById('cvPrevTheme').textContent=theme||'';
+  document.getElementById('cvPrevBadge').textContent=typeText.toUpperCase();
+  document.getElementById('cvPrevBadge').style.background=cvColor;
+  document.getElementById('cvPrevClasse').textContent=classe||'. . . . . . . . . .';
+  document.getElementById('cvPrevAnnee').textContent=annee||'. . . . . / . . . . .';
+  document.getElementById('cvPrevFootLyc').textContent=lycee;
+  document.getElementById('cvPrevFootAn').textContent=filiere;
+  if(prof){document.getElementById('cvPrevFootAn').textContent=filiere+' | '+prof}
+}
+
+function saveCoverTemplate(){
+  var tpl={
+    lycee:document.getElementById('cvLycee').value,
+    filiere:document.getElementById('cvFiliere').value,
+    titre:document.getElementById('cvTitrePG').value,
+    type:document.getElementById('cvTypePG').value,
+    typeText:document.getElementById('cvTypePG').options[document.getElementById('cvTypePG').selectedIndex].text,
+    num:document.getElementById('cvNumPG').value,
+    classe:document.getElementById('cvClassePG').value,
+    annee:document.getElementById('cvAnneePG').value,
+    theme:document.getElementById('cvThemePG').value,
+    prof:document.getElementById('cvProfPG').value,
+    color:cvColor,
+    img:cvImgData,
+    id:Date.now()
+  };
+  cvTemplatesArr.push(tpl);
+  try{localStorage.setItem('cv_templates',JSON.stringify(cvTemplatesArr.map(function(t){var c=Object.assign({},t);c.img=null;return c})))}catch(e){}
+  renderCvTemplates();
+  toast('Modèle enregistré !','ok');
+}
+
+function renderCvTemplates(){
+  var ct=document.getElementById('cvTemplates');
+  var noTpl=document.getElementById('cvNoTpl');
+  if(!cvTemplatesArr.length){ct.innerHTML='';noTpl.style.display='block';return}
+  noTpl.style.display='none';
+  ct.innerHTML=cvTemplatesArr.map(function(t,i){
+    return '<div style="border:1px solid var(--bd);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s" onclick="loadCvTemplate('+i+')" onmouseover="this.style.transform=\'scale(1.02)\'" onmouseout="this.style.transform=\'scale(1)\'">'+
+      '<div style="height:8px;background:'+t.color+'"></div>'+
+      '<div style="padding:10px">'+
+        '<div style="font-size:11px;font-weight:700;color:var(--t)">'+(t.titre||'Sans titre')+'</div>'+
+        '<div style="font-size:9px;color:var(--tl);margin-top:2px">'+(t.typeText||t.type)+' — '+(t.num||'')+'</div>'+
+        '<div style="font-size:9px;color:var(--tl)">'+(t.classe||'')+' — '+(t.theme||'')+'</div>'+
+        '<div style="display:flex;gap:4px;margin-top:6px">'+
+          '<button class="bt bt-s bt-sm" onclick="event.stopPropagation();deleteCvTemplate('+i+')" style="font-size:9px;color:var(--er)">Supprimer</button>'+
+        '</div>'+
+      '</div></div>';
+  }).join('');
+}
+
+function loadCvTemplate(i){
+  var t=cvTemplatesArr[i];
+  if(!t)return;
+  document.getElementById('cvLycee').value=t.lycee||'';
+  document.getElementById('cvFiliere').value=t.filiere||'';
+  document.getElementById('cvTitrePG').value=t.titre||'';
+  document.getElementById('cvTypePG').value=t.type||'activite_tp';
+  document.getElementById('cvNumPG').value=t.num||'';
+  document.getElementById('cvClassePG').value=t.classe||'';
+  document.getElementById('cvAnneePG').value=t.annee||'';
+  document.getElementById('cvThemePG').value=t.theme||'';
+  document.getElementById('cvProfPG').value=t.prof||'';
+  cvColor=t.color||'#2A5A8C';
+  document.querySelectorAll('.cv-col').forEach(function(c){c.classList.toggle('sel',c.getAttribute('data-c')===cvColor)});
+  if(t.img){cvImgData=t.img;document.getElementById('cvImgPrev').src=t.img;document.getElementById('cvImgPrev').style.display='block';document.getElementById('cvImgPlaceholder').style.display='none'}
+  refreshCover();
+  toast('Modèle chargé !','ok');
+  window.scrollTo(0,0);
+}
+
+function deleteCvTemplate(i){
+  cvTemplatesArr.splice(i,1);
+  try{localStorage.setItem('cv_templates',JSON.stringify(cvTemplatesArr))}catch(e){}
+  renderCvTemplates();
+  toast('Modèle supprimé','ok');
+}
+
+function printCoverPage(){
+  var el=document.getElementById('cvLivePreview');
+  var w=window.open('','','width=800,height=1000');
+  w.document.write('<html><head><title>Page de garde</title><style>@page{margin:0}body{margin:0;font-family:Arial,sans-serif}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body>');
+  w.document.write('<div style="width:210mm;min-height:297mm;position:relative">');
+  w.document.write(el.innerHTML);
+  w.document.write('</div></body></html>');
+  w.document.close();
+  setTimeout(function(){w.print()},500);
+}
+
+// Auto-populate prof name from profile
+function initCovers(){
+  if(curUser&&curUser.nom){document.getElementById('cvProfPG').value=curUser.nom}
+  try{var saved=localStorage.getItem('cv_templates');if(saved){cvTemplatesArr=JSON.parse(saved)}}catch(e){}
+  renderCvTemplates();
+  refreshCover();
+}
+setTimeout(initCovers,500);
+
+
+
+// Auto-generate cover page for generated documents
+function generateAutoCover(fn,titre,classe,numFiche,typeCours,competences){
+  var typeLabels={magistral:'Document Élève — Cours',tp:'Activité / TP Élève',td:'TD — Travaux Dirigés'};
+  var typeIcons={magistral:'📘',tp:'🔧',td:'📝'};
+  var typeColors={magistral:'#2A5A8C',tp:'#B84C00',td:'#1B7340'};
+  var col=typeColors[typeCours]||'#2A5A8C';
+  var tLabel=typeLabels[typeCours]||'Document';
+  var lycee=(curUser&&curUser.etab)?curUser.etab:'Lycée Charles Péguy — Eysines';
+  var prof=(curUser&&curUser.nom)?curUser.nom:'';
+  var spec=(curUser&&curUser.spec)?curUser.spec:'MELEC';
+  var filiere='Bac Pro '+spec;
+  var classeText=classe||'';
+
+  var cv='<div style="display:flex;justify-content:center;padding:20px;background:var(--bg2);border-radius:12px">';
+  cv+='<div id="autoCoverPrint" style="width:420px;min-height:594px;background:#fff;border-radius:4px;box-shadow:0 4px 20px rgba(0,0,0,.15);overflow:hidden;font-family:Arial,sans-serif;position:relative">';
+
+  // Bandeau
+  cv+='<div style="background:'+col+';color:#fff;padding:20px 24px">';
+  cv+='<div style="display:flex;justify-content:space-between;align-items:flex-start">';
+  cv+='<div><div style="font-size:11px;opacity:.8;font-weight:600;letter-spacing:1px;text-transform:uppercase">'+lycee+'</div>';
+  cv+='<div style="font-size:10px;opacity:.6;margin-top:2px">'+filiere+'</div></div>';
+  cv+='<div style="font-size:9px;background:rgba(255,255,255,.2);padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px">'+tLabel+'</div>';
+  cv+='</div></div>';
+
+  // Image placeholder
+  cv+='<div style="height:140px;background:linear-gradient(135deg,'+col+'22,'+col+'11);display:flex;align-items:center;justify-content:center">';
+  cv+='<div style="text-align:center;color:'+col+';font-size:48px;opacity:.3">'+(typeIcons[typeCours]||'📄')+'</div></div>';
+
+  // Titre
+  cv+='<div style="padding:24px">';
+  cv+='<div style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Fiche '+numFiche+'</div>';
+  cv+='<div style="font-size:22px;font-weight:800;color:#1a1a1a;line-height:1.2;margin-bottom:16px">'+titre+'</div>';
+  cv+='<div style="display:inline-block;padding:6px 16px;border-radius:6px;font-size:11px;font-weight:700;color:#fff;background:'+col+'">'+tLabel.toUpperCase()+'</div>';
+  cv+='</div>';
+
+  // Champs élève
+  cv+='<div style="padding:0 24px 20px"><div style="border-top:2px solid #eee;padding-top:16px">';
+  cv+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+  cv+='<div><div style="font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px">Nom</div><div style="border-bottom:1px solid #ccc;padding:6px 0;min-height:20px;font-size:12px;color:#ccc">. . . . . . . . . . . . . . . . . . . . . .</div></div>';
+  cv+='<div><div style="font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px">Prénom</div><div style="border-bottom:1px solid #ccc;padding:6px 0;min-height:20px;font-size:12px;color:#ccc">. . . . . . . . . . . . . . . . . . . . . .</div></div>';
+  cv+='</div>';
+  cv+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">';
+  cv+='<div><div style="font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px">Classe</div><div style="border-bottom:1px solid #ccc;padding:6px 0;min-height:20px;font-size:12px">'+(classeText||'<span style=color:#ccc>. . . . . . . . . .</span>')+'</div></div>';
+  cv+='<div><div style="font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px">Année scolaire</div><div style="border-bottom:1px solid #ccc;padding:6px 0;min-height:20px;font-size:12px;color:#ccc">. . . . . / . . . . .</div></div>';
+  cv+='</div>';
+  cv+='</div></div>';
+
+  // Footer
+  cv+='<div style="position:absolute;bottom:0;left:0;right:0;padding:10px 24px;font-size:8px;color:#999;display:flex;justify-content:space-between;border-top:1px solid #eee">';
+  cv+='<span>'+lycee+'</span>';
+  cv+='<span>'+filiere+(prof?' | '+prof:'')+'</span>';
+  cv+='</div>';
+
+  cv+='</div></div>';
+
+  // Print button
+  cv+='<div style="text-align:center;margin-top:14px"><button class="bt bt-p bt-sm" onclick="printAutoCover()">🖨 Imprimer la page de garde</button></div>';
+
+  return cv;
+}
+
+function printAutoCover(){
+  var el=document.getElementById('autoCoverPrint');
+  if(!el)return;
+  var w=window.open('','','width=800,height=1000');
+  w.document.write('<html><head><title>Page de garde</title><style>@page{margin:0;size:A4}body{margin:0;font-family:Arial,sans-serif;display:flex;justify-content:center}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body>');
+  w.document.write('<div style="width:210mm;min-height:297mm;position:relative">'+el.outerHTML.replace('width:420px','width:100%').replace('min-height:594px','min-height:297mm')+'</div>');
+  w.document.write('</body></html>');
+  w.document.close();
+  setTimeout(function(){w.print()},500);
+}
 
 </script>
 </body>
