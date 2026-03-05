@@ -407,7 +407,7 @@ body.no-auth .mn{margin-left:0!important}
 <!-- SIDEBAR -->
 <aside class="sb" id="sb">
   <div class="sb-h"><div class="sb-logo">SE</div><div class="sb-h-t"><h2>Studio Éducatif</h2><span>Tous niveaux — Toutes filières</span></div></div>
-  <div class="sb-u"><div class="sb-av">DB</div><div class="sb-ui"><div class="n">David Bouisson</div><div class="r">Enseignant</div></div></div>
+  <div class="sb-u"><div class="sb-av" id="sbAvatar">?</div><div class="sb-ui"><div class="n" id="sbName">Utilisateur</div><div class="r" id="sbRole">—</div></div></div>
   <nav class="sb-n">
     <div class="sb-s">Creation</div>
     <div class="ni ac" data-pg="home" onclick="nav('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Accueil</div>
@@ -438,8 +438,8 @@ body.no-auth .mn{margin-left:0!important}
   <h1>Bienvenue sur <span>Studio Éducatif</span></h1>
   <p>La plateforme qui genere vos documents pédagogiques conformes aux exigences institutionnelles. Tous niveaux, toutes filières.</p>
   <div class="land-btns">
-    <button class="bt-land primary" onclick="showAuth('signup')">S'inscrire gratuitement</button>
-    <button class="bt-land secondary" onclick="scrollToDemo()">Découvrir l'interface</button>
+    <button class="bt-land primary" onclick="showQuickStart()">Commencer gratuitement</button>
+    <button class="bt-land secondary" onclick="showQuickStart()">Essayer gratuitement</button>
     <button class="bt-land secondary" onclick="showAuth('login')">Se connecter</button>
   </div>
   <div class="land-feats">
@@ -533,6 +533,69 @@ body.no-auth .mn{margin-left:0!important}
 </div>
 
 <!-- AUTH BOX (login / inscription) -->
+
+<!-- QUICK START ONBOARDING -->
+<div id="quickStartOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,37,64,.9);backdrop-filter:blur(8px);z-index:2500;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;max-width:480px;width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#2A5A8C,#1a3d5c);color:#fff;padding:28px 24px;border-radius:16px 16px 0 0;text-align:center">
+      <div style="font-size:36px;margin-bottom:8px">🎓</div>
+      <h2 style="font-size:20px;font-weight:800;margin-bottom:4px;font-family:'Playfair Display',serif">Bienvenue sur Studio Éducatif</h2>
+      <p style="font-size:12px;opacity:.8">Présentez-vous pour personnaliser vos documents</p>
+    </div>
+    <!-- Form -->
+    <div style="padding:24px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div><label style="font-size:11px;font-weight:600;color:#555;display:block;margin-bottom:4px">Prénom *</label><input class="fn" id="qsFirst" placeholder="Votre prénom"/></div>
+        <div><label style="font-size:11px;font-weight:600;color:#555;display:block;margin-bottom:4px">Nom *</label><input class="fn" id="qsLast" placeholder="Votre nom"/></div>
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:11px;font-weight:600;color:#555;display:block;margin-bottom:4px">Établissement</label>
+        <input class="fn" id="qsEtab" placeholder="Ex: Lycée Charles Péguy — Eysines"/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div><label style="font-size:11px;font-weight:600;color:#555;display:block;margin-bottom:4px">Cycle *</label>
+          <select class="fn" id="qsCycle" onchange="updQsNiveaux()">
+            <option value="">— Choisir —</option>
+            <option value="primaire">Primaire</option>
+            <option value="college">Collège</option>
+            <option value="lycee_gen">Lycée général</option>
+            <option value="lycee_techno">Lycée technologique</option>
+            <option value="lycee_pro">Lycée professionnel</option>
+            <option value="bts">BTS / CPGE</option>
+            <option value="universite">Université</option>
+            <option value="formation">Formation pro</option>
+          </select>
+        </div>
+        <div><label style="font-size:11px;font-weight:600;color:#555;display:block;margin-bottom:4px">Spécialité / Filière</label>
+          <input class="fn" id="qsSpec" placeholder="Ex: MELEC, STI2D..."/>
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:11px;font-weight:600;color:#555;display:block;margin-bottom:4px">Domaine / Matière</label>
+        <select class="fn" id="qsDomaine" onchange="updQsMatieres()">
+          <option value="">— Choisir —</option>
+          <option value="sciences">Sciences</option>
+          <option value="lettres">Lettres / Langues</option>
+          <option value="shs">Sciences humaines</option>
+          <option value="arts">Arts</option>
+          <option value="sport">Sport / EPS</option>
+          <option value="pro">Professionnel / Technique</option>
+          <option value="polyvalent">Polyvalent (PE)</option>
+        </select>
+      </div>
+      <div style="margin-bottom:20px;padding:12px;background:rgba(42,90,140,.04);border-radius:8px;font-size:10px;color:#666;line-height:1.5">
+        💡 Ces informations servent uniquement à personnaliser vos documents générés. Aucun compte n'est créé, aucune donnée n'est envoyée à un serveur.
+      </div>
+      <button class="bt bt-p" onclick="doQuickStart()" style="width:100%;padding:12px;font-size:14px;font-weight:700">🚀 Commencer à créer</button>
+      <div style="text-align:center;margin-top:12px">
+        <span style="font-size:11px;color:#999">Déjà inscrit ? </span>
+        <a href="#" onclick="hideQuickStart();showAuth('login');return false" style="font-size:11px;color:var(--p);font-weight:600;text-decoration:none">Se connecter</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="authOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,37,64,.85);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center">
   <!-- LOGIN -->
   <div class="ab-panel" id="authLogin" style="display:block">
@@ -1219,11 +1282,11 @@ function applyLogin(){
   // Lock premium features for free users
   applyLocks();
   // Sidebar user info
-  var sbN=document.querySelector('.sb-u .n');
-  var sbR=document.querySelector('.sb-u .r');
-  var sbA=document.querySelector('.sb-av');
+  var sbN=document.getElementById('sbName');
+  var sbR=document.getElementById('sbRole');
+  var sbA=document.getElementById('sbAvatar');
   if(sbN)sbN.textContent=curUser.first+' '+curUser.last;
-  if(sbR)sbR.textContent=curUser.role==='creator'?'Createur':curUser.role==='premium'?'Premium':'Gratuit';
+  if(sbR)sbR.textContent=curUser.role==='creator'?'Créateur':curUser.role==='premium'?'Premium':curUser.quickStart?'Essai gratuit':'Gratuit';
   if(sbA)sbA.textContent=(curUser.first[0]||'')+(curUser.last[0]||'');
   if(typeof loadProfile==='function')loadProfile();
   updateAuthUI();checkOnboard();
@@ -1893,13 +1956,13 @@ function showR(){
     var meta=docMap[key]||{i:'📄',t:key};
     tabs.push('<button class="rt-tab'+(tabs.length===0?' act':'')+'" onclick="showResTab(this,\'rp_'+key+'\')">'+meta.i+' '+meta.t+'</button>');
     panels.push('<div class="rt-panel" id="rp_'+key+'" style="'+(panels.length===0?'':'display:none')+'">'+renderDocContent(key,gc[key],fn)+'</div>');
-  }
+  });
   // Auto-generate cover page if checkbox is checked
   if(docsChoisis.indexOf('page_garde')>=0){
     var cvHtml=generateAutoCover(fn,titre,classe,numFiche,typeCours,competences);
     tabs.push('<button class="rt-tab" onclick="showResTab(this,\'rp_page_garde\')">📄 Page de garde</button>');
     panels.push('<div class="rt-panel" id="rp_page_garde" style="display:none">'+cvHtml+'</div>');
-  });
+  }
   var html='<div class="rt-tabs">'+tabs.join('')+'</div><div class="rt-panels">'+panels.join('')+'</div>';
   html+='<div style="display:flex;gap:6px;margin-top:14px;flex-wrap:wrap;justify-content:center">';
   Object.keys(gc).forEach(function(key){var meta=docMap[key]||{i:'📄',t:key};html+='<button class="bt bt-p bt-sm" onclick="downloadDoc(\''+key+'\')">'+meta.i+' '+fn+'_'+key+'</button>'});
@@ -1938,7 +2001,7 @@ function renderDocContent(key,data,fn){
     if(data.timing_detaille&&data.timing_detaille.length){h+='<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--p);margin-bottom:6px">⏱ Timing</div>';data.timing_detaille.forEach(function(t){h+='<div style="display:flex;gap:8px;padding:4px 0;font-size:10px;border-bottom:1px solid rgba(0,0,0,.04)"><span style="font-weight:700;color:var(--a);min-width:50px">'+t.heure+'</span><span style="color:var(--tl);min-width:40px">'+t.duree+'</span><span>'+t.action+'</span></div>'});h+='</div>'}
     if(data.materiel_necessaire&&data.materiel_necessaire.length){h+='<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--a);margin-bottom:4px">🧰 Materiel</div><div style="display:flex;flex-wrap:wrap;gap:4px">';data.materiel_necessaire.forEach(function(m){h+='<span style="padding:3px 8px;border-radius:4px;font-size:10px;background:rgba(232,114,42,.06);color:var(--a)">'+m+'</span>'});h+='</div></div>'}
     if(data.differenciation){h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="padding:10px;border-radius:8px;background:rgba(42,90,140,.04);font-size:10px;line-height:1.5"><div style="font-weight:700;color:var(--p);margin-bottom:3px">🔵 En difficulte</div>'+(data.differenciation.eleves_difficulte||'')+'</div><div style="padding:10px;border-radius:8px;background:rgba(232,114,42,.04);font-size:10px;line-height:1.5"><div style="font-weight:700;color:var(--a);margin-bottom:3px">🟠 Avances</div>'+(data.differenciation.eleves_avances||'')+'</div></div>'}
-  if(data.document_cours_eleve){var dce=data.document_cours_eleve;h+='<div style="margin-top:12px;padding:12px;background:rgba(42,90,140,.03);border-radius:10px;border:1px solid rgba(42,90,140,.15)"><div style="font-size:12px;font-weight:700;color:var(--p);margin-bottom:8px">📘 Document cours élève</div>';if(dce.sections&&dce.sections.length){dce.sections.forEach(function(s){h+='<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--p);padding:4px 0;border-bottom:1px solid rgba(42,90,140,.15)">'+s.numero+'. '+s.titre+'</div><div style="font-size:10px;line-height:1.5;padding:6px 0;color:var(--t)">'+(s.contenu||'')+'</div></div>'})}if(dce.essentiel_a_retenir&&dce.essentiel_a_retenir.length){h+='<div style="padding:10px;background:rgba(45,138,86,.06);border-radius:8px;margin-top:6px"><div style="font-size:11px;font-weight:700;color:var(--ok);margin-bottom:4px">📗 L'essentiel à retenir</div>';dce.essentiel_a_retenir.forEach(function(e){h+='<div style="font-size:10px;padding:2px 0">• '+e+'</div>'});h+='</div>'}if(dce.auto_evaluation&&dce.auto_evaluation.length){h+='<div style="margin-top:6px"><div style="font-size:10px;font-weight:700;color:#7C3AED;margin-bottom:3px">🎯 Auto-évaluation</div>';dce.auto_evaluation.forEach(function(a){h+='<div style="font-size:10px;padding:2px 0">☐ '+a.competence+'</div>'});h+='</div>'}h+='</div>'}
+  if(data.document_cours_eleve){var dce=data.document_cours_eleve;h+='<div style="margin-top:12px;padding:12px;background:rgba(42,90,140,.03);border-radius:10px;border:1px solid rgba(42,90,140,.15)"><div style="font-size:12px;font-weight:700;color:var(--p);margin-bottom:8px">📘 Document cours élève</div>';if(dce.sections&&dce.sections.length){dce.sections.forEach(function(s){h+='<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--p);padding:4px 0;border-bottom:1px solid rgba(42,90,140,.15)">'+s.numero+'. '+s.titre+'</div><div style="font-size:10px;line-height:1.5;padding:6px 0;color:var(--t)">'+(s.contenu||'')+'</div></div>'})}if(dce.essentiel_a_retenir&&dce.essentiel_a_retenir.length){h+='<div style="padding:10px;background:rgba(45,138,86,.06);border-radius:8px;margin-top:6px"><div style="font-size:11px;font-weight:700;color:var(--ok);margin-bottom:4px">📗 L\'essentiel à retenir</div>';dce.essentiel_a_retenir.forEach(function(e){h+='<div style="font-size:10px;padding:2px 0">• '+e+'</div>'});h+='</div>'}if(dce.auto_evaluation&&dce.auto_evaluation.length){h+='<div style="margin-top:6px"><div style="font-size:10px;font-weight:700;color:#7C3AED;margin-bottom:3px">🎯 Auto-évaluation</div>';dce.auto_evaluation.forEach(function(a){h+='<div style="font-size:10px;padding:2px 0">☐ '+a.competence+'</div>'});h+='</div>'}h+='</div>'}
   }else if(key==='activite_tp'){
     if(data.situation_professionnelle)h+='<div style="padding:12px;background:rgba(232,114,42,.04);border-radius:8px;border-left:3px solid var(--a);font-size:11px;line-height:1.6;margin-bottom:10px"><b>🏭 Situation pro :</b> '+data.situation_professionnelle+'</div>';
     if(data.securite){h+='<div style="padding:10px;background:rgba(197,48,48,.04);border-radius:8px;border:1px solid rgba(197,48,48,.15);margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--er);margin-bottom:6px">⚠️ Securite</div>';if(data.securite.epi_obligatoires)h+='<div style="display:flex;flex-wrap:wrap;gap:4px">'+data.securite.epi_obligatoires.map(function(e){return '<span style="padding:3px 8px;border-radius:4px;font-size:10px;background:rgba(197,48,48,.08);color:var(--er)">🛡 '+e+'</span>'}).join('')+'</div>';h+='</div>'}
@@ -2573,7 +2636,13 @@ function printPg(id){var el=document.getElementById(id);if(!el)return;var w=wind
 var demoMode=false;
 function enterDemo(){demoMode=true;document.getElementById('landingView').style.display='none';document.getElementById('dashView').style.display='block';document.body.classList.remove('no-auth');toast('Mode demo — Inscrivez-vous pour generer !','ok')}
 async function ensureCreatorAccount(){var us=await loadUsers();var em='david.bouisson'+String.fromCharCode(64)+'ac-bordeaux.fr';var cr=us.find(function(u){return u.email===em});if(!cr){us.push({first:'David',last:'Bouisson',email:em,role:'creator',date:new Date().toLocaleDateString('fr-FR'),cycle:'lycee_pro',niveaux:['seconde','premiere','terminale'],domaine:'pro',matieres:['Electrotechnique','Genie electrique'],spec:'MELEC',etab:'Lycee Peguy Eysines',academie:'ac-bordeaux.fr',genCount:0,onboarded:true});await saveUsers(us);console.log('Creator OK')}}
-(async function init(){await loadSession();if(curUser)applyLogin();loadBib().then(function(){renderBib2();buildHome()});ensureCreatorAccount();if(!curUser)document.body.classList.add('no-auth')})()
+(async function init(){
+  var hasSession=await loadSession();
+  if(hasSession&&curUser){applyLogin()}
+  loadBib().then(function(){renderBib2();buildHome()});
+  ensureCreatorAccount();
+  if(!curUser){document.body.classList.add('no-auth')}
+})()
 
 
 
@@ -2797,6 +2866,59 @@ function printAutoCover(){
   w.document.write('</body></html>');
   w.document.close();
   setTimeout(function(){w.print()},500);
+}
+
+
+
+// === QUICK START ONBOARDING ===
+function showQuickStart(){
+  document.getElementById('quickStartOverlay').style.display='flex';
+}
+function hideQuickStart(){
+  document.getElementById('quickStartOverlay').style.display='none';
+}
+
+function updQsNiveaux(){
+  // Just for visual feedback, not critical
+}
+function updQsMatieres(){
+  // Just for visual feedback, not critical
+}
+
+async function doQuickStart(){
+  var first=document.getElementById('qsFirst').value.trim();
+  var last=document.getElementById('qsLast').value.trim();
+  var etab=document.getElementById('qsEtab').value.trim();
+  var cycle=document.getElementById('qsCycle').value;
+  var spec=document.getElementById('qsSpec').value.trim();
+  var domaine=document.getElementById('qsDomaine').value;
+
+  if(!first||!last){toast('Prénom et nom requis pour personnaliser vos documents.','er');return}
+  if(!cycle){toast('Sélectionnez votre cycle d\'enseignement.','er');return}
+
+  // Create a local user (no email, no password, no server)
+  curUser={
+    first:first,
+    last:last,
+    email:'',
+    role:'free',
+    date:new Date().toLocaleDateString('fr-FR'),
+    cycle:cycle,
+    niveaux:[],
+    domaine:domaine,
+    matieres:[],
+    spec:spec,
+    etab:etab,
+    academie:'',
+    genCount:0,
+    onboarded:true,
+    quickStart:true
+  };
+
+  await saveSession();
+  hideQuickStart();
+  applyLogin();
+  toast('Bienvenue '+first+' ! Votre espace est prêt.','ok');
 }
 
 </script>
